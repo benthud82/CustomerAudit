@@ -32,7 +32,7 @@ switch ($var_clickedid) {
                             custaudit.scorecard_display_salesplan ON SALESPLAN = auditcomplete_custid
                         WHERE
                             auditcomplete_custtype = 'SALESPLAN'
-                                and auditcomplete_user = '$var_userid'
+                                and UPPER(auditcomplete_user) = '$var_userid'
                                 and auditcomplete_date >= DATE_SUB(NOW(), INTERVAL 90 DAY)
                                 and SCOREMONTH is not NULL;";
         break;
@@ -50,7 +50,7 @@ switch ($var_clickedid) {
                             custaudit.scorecard_display_billto ON BILLTONUM = auditcomplete_custid
                         WHERE
                             auditcomplete_custtype = 'BILLTO'
-                                and auditcomplete_user = '$var_userid'
+                                and UPPER(auditcomplete_user) = '$var_userid'
                                 and auditcomplete_date >= DATE_SUB(NOW(), INTERVAL 90 DAY)
                                 and SCOREMONTH is not NULL;";
         break;
@@ -68,7 +68,7 @@ switch ($var_clickedid) {
                             custaudit.scorecard_display_shipto ON SHIPTONUM = auditcomplete_custid
                         WHERE
                             auditcomplete_custtype = 'SHIPTO'
-                                and auditcomplete_user = '$var_userid'
+                                and UPPER(auditcomplete_user) = '$var_userid'
                                 and auditcomplete_date >= DATE_SUB(NOW(), INTERVAL 90 DAY)
                                 and SCOREMONTH is not NULL;";
         break;
