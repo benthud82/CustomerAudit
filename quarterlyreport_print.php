@@ -26,7 +26,10 @@
                     <?php include 'globaldata/qtr_report_descriptive.php'; ?>
                     <div id="gauge_custtrend" style="min-width: 310px; max-width: 400px; height: 300px; margin: 0 auto"></div>
                     <div id="ctn_scorehistogram"></div>
-
+                    <div id="ctn_top3salesplans">
+                        <div class="h2">High Impact Salesplan Performance</div>
+                        <?php include 'globaldata/top3salesplans.php'; ?>
+                    </div>
                     <!--diagnostic stats (why did it happen?)-->
 
                     <!--predictive stats(what will happen next?)-->
