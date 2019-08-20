@@ -210,7 +210,7 @@
                                     opposite: true,
                                     min: 0,
                                     title: {
-                                        text: 'Slotting Moves Executed'
+                                        text: 'Count of Customers'
                                     },
                                     labels: {
                                         formatter: function () {
