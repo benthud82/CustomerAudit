@@ -122,7 +122,7 @@ foreach ($driver_array as $driverkey => $value) {
 
 foreach ($top3_array as $key => $value) {
     ?>
-    <div class="row">
+<div class="row" style="margin-left: 50px;">
         <?php
         $driver_stmt = '';
         $salesplan = $top3_array[$key]['SALESPLAN'];

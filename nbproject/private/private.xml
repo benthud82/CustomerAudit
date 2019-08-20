@@ -3,9 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Bitnami/wampstack-5.6.31-0/apache2/htdocs/CustomerAudit/globaldata/top3salesplans.php</file>
-            <file>file:/C:/Bitnami/wampstack-5.6.31-0/apache2/htdocs/CustomerAudit/quarterlyreport_admin.php</file>
-            <file>file:/C:/Bitnami/wampstack-5.6.31-0/apache2/htdocs/CustomerAudit/salesplancheck.php</file>
+            <file>file:/C:/Bitnami/wampstack-7.3.8-0/apache2/htdocs/CustomerAudit/globaldata/graphdata_scorehistogram.php</file>
+            <file>file:/C:/Bitnami/wampstack-7.3.8-0/apache2/htdocs/CustomerAudit/sessioninclude.php</file>
+            <file>file:/C:/Bitnami/wampstack-7.3.8-0/apache2/htdocs/CustomerAudit/globaldata/qtr_report_descriptive.php</file>
+            <file>file:/C:/Bitnami/wampstack-7.3.8-0/apache2/htdocs/CustomerAudit/login.php</file>
+            <file>file:/C:/Bitnami/wampstack-7.3.8-0/apache2/htdocs/CustomerAudit/connection/connection_details.php</file>
+            <file>file:/C:/Bitnami/wampstack-7.3.8-0/apache2/htdocs/CustomerAudit/quarterlyreport_print.php</file>
+            <file>file:/C:/Bitnami/wampstack-7.3.8-0/apache2/htdocs/CustomerAudit/signin.php</file>
         </group>
     </open-files>
 </project-private>

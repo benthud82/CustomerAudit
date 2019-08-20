@@ -19,7 +19,7 @@ $time = strtotime("-90 days", time());
 $date = date("Y-m-d", $time);
 
 $scoresql = $conn1->prepare("SELECT 
-                                                            @curRank:=@curRank + 1 AS rank,
+                                                            @curRank:=@curRank + 1 AS currank,
                                                             p.salesplan_scoreavg_30day * 100 as AVG_SP
                                                         FROM
                                                             custaudit.scoreavg_salesplan p,
@@ -30,7 +30,7 @@ $scoresql = $conn1->prepare("SELECT
 $scoresql->execute();
 $scorearray = $scoresql->fetchAll(pdo::FETCH_ASSOC);
 
-$rankarray = array_column($scorearray, 'rank');
+$rankarray = array_column($scorearray, 'currank');
 $totalscorearray = array_column($scorearray, 'AVG_SP');
 
 $totalscoretrend = linear_regression($rankarray, $totalscorearray);
