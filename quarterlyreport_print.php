@@ -38,18 +38,8 @@
                 </section>
             </section>
 
-
             <script>
-                $("body").tooltip({selector: '[data-toggle="tooltip"]'});
 
-
-
-            </script>
-
-
-
-            <script>
-                $("#modules").addClass('active');
 
 
                 Highcharts.chart('gauge_custtrend', {
