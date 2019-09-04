@@ -30,7 +30,12 @@
                         <div class="h2" style="margin-left: 50px;">High Impact Salesplan Performance</div>
                         <?php include 'globaldata/top3salesplans.php'; ?>
                     </div>
-                    <!--diagnostic stats (why did it happen?)-->
+
+                    <!--diagnostic stats (why did it happen / what did our team do?)-->
+                    <div id="ctn_custauditcount">
+                        <div class="h2" style="margin-left: 50px;">Audits Performed</div>
+                        <?php include 'globaldata/cust_audit_count.php'; ?>
+                    </div>
 
                     <!--predictive stats(what will happen next?)-->
 

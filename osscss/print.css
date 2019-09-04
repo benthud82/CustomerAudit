@@ -40,8 +40,12 @@
         padding-left: 0px !important;
         padding-right: 0px !important;
     }
-    
+
     .cellshade_blue{
         background-color: #d1dffd !important;
+    }
+
+    .text-center{
+        text-align: center;
     }
 }
