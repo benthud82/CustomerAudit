@@ -16,6 +16,7 @@ FROM
     custaudit.scoreavg_shipto ON scoreavg_salesplan.salesplan_scoreavg_date = scoreavg_shipto.salesplan_scoreavg_date
 WHERE
     scoreavg_salesplan.salesplan_scoreavg_date >= DATE_ADD(CURDATE(), INTERVAL - 365 DAY)
+    and scoreavg_salesplan.salesplan_scoreavg_date >= '2019-05-05'
 ORDER BY scoreavg_salesplan.salesplan_scoreavg_date");
 $result1->execute();
 

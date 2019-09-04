@@ -8,6 +8,7 @@ include 'globaldata/inusertable.php';  //has the user registered?
 include '../globalincludes/usa_asys_session.php';
 
 
+
 if (count($usersetarray) == 0) {  //the user is not logged in redirect to registration page
     header('Location: registration.php');
 } elseif (isset($aseriesconn)) {

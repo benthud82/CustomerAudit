@@ -10,7 +10,8 @@ $result1 = $conn1->prepare("SELECT
                                                     custaudit.scorecard_display_salesplan
                                                 WHERE
                                                     TOTR12SALES >= 500000
-                                                GROUP BY bucket;");
+                                                GROUP BY bucket
+                                                ORDER BY bucket;");
 $result1->execute();
 
 
