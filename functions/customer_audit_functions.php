@@ -172,12 +172,11 @@ function _rolling12start1yyddd() {
 function _yyyydddtogregdate($yyyyddd) {
     $year = substr($yyyyddd, 0, 4);
     $day = substr($yyyyddd, 4);
-    
-   
-    
-    $returndate = date("m/d/Y",   mktime(0, 0, 0, 1, $day, $year));
+
+
+
+    $returndate = date("m/d/Y", mktime(0, 0, 0, 1, $day, $year));
     return $returndate;
- 
 }
 
 function _gregdateto1yyddd($convertdate) {
@@ -207,8 +206,6 @@ function _currentmonthfiscal() {
     return $current_month_start_fiscal;
 }
 
-
-
 function _1yydddtogregdate($date) {
     $a1 = substr($date, 3, 3);
     $a2 = substr($date, 1, 2);
@@ -224,4 +221,35 @@ function _jdatetomysqldate($jdate) {
     $ts = mktime(0, 0, 0, 1, $days, $year);
     $mydate = date('Y-m-d', $ts);
     return $mydate;
+}
+
+function _atrisk($CNT_DC, $inv_onorder, $inv_onhand, $inv_boq, $AVG_DAILY_UNITS, $AVG_DAILY_PICKS) {
+    //determine if item is stlil at risk of fill rate issues
+    //
+    //opt1: Is item still on BO with 0 on hand?
+    if ($inv_boq > 0 && $inv_onhand < $inv_boq) {
+        $opt_atrisk = 1;
+        return $opt_atrisk;
+    }
+
+    //opt2: nothing oh nothing on bo
+    if ($inv_boq == 0 && $inv_onhand == 0) {
+        $opt_atrisk = 2;
+        return $opt_atrisk;
+    }
+
+    //opt3: onhand is greater than boq, but quantity is still on boq. Should be cleared very soon
+    if ($inv_boq > 0 && $inv_onhand > $inv_boq) {
+        $opt_atrisk = 3;
+        return $opt_atrisk;
+    }
+
+    //opt99: Item is not at risk going forward
+    if ($inv_boq == 0 && $inv_onhand > 0) {
+        $opt_atrisk = 99;
+        return $opt_atrisk;
+    }
+
+    $opt_atrisk = 0;
+    return $opt_atrisk;
 }

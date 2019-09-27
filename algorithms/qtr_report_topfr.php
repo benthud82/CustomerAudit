@@ -1,6 +1,12 @@
 <?php
 
-include_once '../connection/connection_details.php';
+If (!isset($conn1)) {
+    include_once '../connection/connection_details.php';
+    include_once '../functions/customer_audit_functions.php';
+}
+
+$rollqtrdate = date('Y-m-d', strtotime('-90 days'));
+$rollqtrjdate = _gregdateto1yyddd($rollqtrdate);
 
 //pull in top 10 fill rate hits
 //excludes assumed mfg bo
@@ -40,7 +46,7 @@ $sql_top_fr = $conn1->prepare("SELECT
                                                                         JOIN
                                                                     largecust.status_inv ON inv_whse = INV_PWHS AND inv_item = ITEM
                                                                 WHERE
-                                                                    OR_DATE >= 119250 AND item_flu IS NULL
+                                                                    OR_DATE >= $rollqtrjdate AND item_flu IS NULL
                                                                         AND mfgbo_item IS NULL
                                                                 GROUP BY INV_PWHS , ITEM
                                                                 ORDER BY CNT_DC DESC
@@ -53,45 +59,55 @@ $array_to_pfr = $sql_top_fr->fetchAll(pdo::FETCH_ASSOC);
 foreach ($array_to_pfr as $key => $value) {
     $whse = $array_to_pfr[$key]['INV_PWHS'];
     $item = $array_to_pfr[$key]['ITEM'];
-    $inv_onorder = intval($array_to_pfr[$key]['inv_onorder']);
 
-    if ($inv_onorder > 0) {
-        
-        //this is not working.  Need to set the date to 2199-01-01 instead of 0000-00-00 for all of the avg and max dates for teh urfdate_est table
-        
-        $sql_openpo = $conn1->prepare("SELECT 
-                                                                            A.OPENSUPP,
-                                                                            A.OPENWHSE,
-                                                                            A.OPENITEM,
-                                                                            A.OPENPONUM,
-                                                                            A.PODATE,
-                                                                            LEAST(CASE
-                                                                                        WHEN A.AVGURFDATE = '0000-00-00' THEN '9999-99-99'
-                                                                                        ELSE A.AVGURFDATE
-                                                                                    END,
-                                                                                    CASE
-                                                                                        WHEN A.AVGEDIDATE = '0000-00-00' THEN '9999-99-99'
-                                                                                        ELSE A.AVGEDIDATE
-                                                                                    END) AS DATE_EXPECTED,
-                                                                            LEAST(CASE
-                                                                                        WHEN A.MAXURFDATE = '0000-00-00' THEN '9999-99-99'
-                                                                                        ELSE A.MAXURFDATE
-                                                                                    END,
-                                                                                    CASE
-                                                                                        WHEN A.MAXEDIDATE = '0000-00-00' THEN '9999-99-99'
-                                                                                        ELSE A.MAXEDIDATE
-                                                                                    END) AS DATE_LATEST,
-                                                                            OPENPURQTY
-                                                                        FROM
-                                                                            custaudit.urfdate_est A
-                                                                                JOIN
-                                                                            custaudit.openpo B ON A.OPENPONUM = B.OPENPONUM
-                                                                                AND B.OPENITEM = A.OPENITEM
-                                                                        WHERE
-                                                                            A.OPENITEM = $item AND A.OPENWHSE = $whse
-                                                                            ORDER BY DATE_EXPECTED");
-        $sql_openpo->execute();
-        $array_openpo = $sql_openpo->fetchAll(pdo::FETCH_ASSOC);
+    $sql_openpo = $conn1->prepare("SELECT 
+                                                                        A.OPENWHSE,
+                                                                        A.OPENITEM,
+                                                                        A.OPENPONUM,
+                                                                        A.PODATE,
+                                                                        LEAST(A.AVGURFDATE, A.AVGEDIDATE) AS DATE_EXPECTED,
+                                                                        LEAST(A.MAXURFDATE, A.MAXEDIDATE) AS DATE_LATEST,
+                                                                        OPENPURQTY
+                                                                    FROM
+                                                                        custaudit.urfdate_est A
+                                                                            JOIN
+                                                                        custaudit.openpo B ON A.OPENPONUM = B.OPENPONUM
+                                                                            AND B.OPENITEM = A.OPENITEM
+                                                                    WHERE
+                                                                        A.OPENITEM = $item AND A.OPENWHSE = $whse
+                                                                    HAVING DATE_EXPECTED > '2018-01-01'
+                                                                        AND DATE_LATEST > '2018-01-01'
+                                                                    ORDER BY DATE_EXPECTED");
+    $sql_openpo->execute();
+    $array_openpo = $sql_openpo->fetchAll(pdo::FETCH_ASSOC);
+
+    if (!empty($array_openpo)) {
+        $openpocount = count($array_openpo);
+        $array_to_pfr[$key]['PO_OPEN'] = $openpocount;
+        $array_to_pfr[$key]['DATE_EXPECTED'] = $array_openpo[0]['DATE_EXPECTED'];
+        $array_to_pfr[$key]['DATE_LATEST'] = $array_openpo[0]['DATE_LATEST'];
+        $array_to_pfr[$key]['OPENPURQTY'] = $array_openpo[0]['OPENPURQTY'];
+    } else {
+        //apend no open po data to fill rate array
+        $array_to_pfr[$key]['PO_OPEN'] = 0;
+        $array_to_pfr[$key]['DATE_EXPECTED'] = 'NA';
+        $array_to_pfr[$key]['DATE_LATEST'] = 'NA';
+        $array_to_pfr[$key]['OPENPURQTY'] = 0;
     }
-    print_r($array_openpo);
+    //pull in variables for analysis
+    $CNT_DC = $array_to_pfr[$key]['CNT_DC'];
+    $inv_onorder = $array_to_pfr[$key]['inv_onorder'];
+    $inv_onhand = $array_to_pfr[$key]['inv_onhand'];
+    $inv_boq = $array_to_pfr[$key]['inv_boq'];
+    $AVG_DAILY_UNITS = $array_to_pfr[$key]['AVG_DAILY_UNITS'];
+    $AVG_DAILY_PICKS = $array_to_pfr[$key]['AVG_DAILY_PICKS'];
+
+    //is item still at risk?
+    $array_atrisk = _atrisk($CNT_DC, $inv_onorder, $inv_onhand, $inv_boq, $AVG_DAILY_UNITS, $AVG_DAILY_PICKS);
+    if ($array_atrisk == 0) {
+        print_r($array_to_pfr[$key]);
+        echo '<br>';
+        echo '<br>';
+    }
 }
+

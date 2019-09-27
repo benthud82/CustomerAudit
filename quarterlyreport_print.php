@@ -6,6 +6,7 @@
     <head>
         <title>Large Customer Quarterly Report</title>
         <?php include_once 'headerincludes.php'; ?>
+        <?php include_once 'functions/customer_audit_functions.php'; ?>
         <link rel="stylesheet" type="text/css" href="osscss/print.css" media="print">
         <style>
             @media print {
@@ -36,17 +37,18 @@
                         <div class="h2" style="margin-left: 50px;">Audits Performed</div>
                         <?php include 'globaldata/cust_audit_count.php'; ?>
                     </div>
-
+                    <a href="algorithms/qtr_report_topfr.php"></a>
                     <!--predictive stats(what will happen next?)-->
+                    <div id="pred_top_fr">
+                        <div class="h2" style="margin-left: 50px;">Top 10 Fill Rate Opportunities</div>
+                        <?php include 'algorithms/qtr_report_topfr.php'; ?>
+                    </div>
 
                     <!--prescriptive stats(how can we make it happen?)-->
                 </section>
             </section>
 
             <script>
-
-
-
                 Highcharts.chart('gauge_custtrend', {
 
                     chart: {
@@ -156,7 +158,6 @@
                                         }, 3000);
                                     }
                                 });
-
 
                         //Chart options and ajax for labor hours by hour
                         function highchartoptions() {
