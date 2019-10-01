@@ -1,6 +1,6 @@
 <?php
 include_once 'connection/connection_details.php';
-include_once '../globalfunctions/custdbfunctions.php';
+//include_once '../globalfunctions/custdbfunctions.php';
 
 //top 3 salesplans score history increase/decrease
 $top3_sql = $conn1->prepare("SELECT 

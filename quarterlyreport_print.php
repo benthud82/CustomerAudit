@@ -44,6 +44,57 @@
                         <?php include 'algorithms/qtr_report_topfr.php'; ?>
                     </div>
 
+                    <table class="table table-responsive-sm table-hover table-outline mb-0">
+                        <thead class="thead-light">
+                            <tr>
+
+                                <th>Item</th>
+                                <th class="">Inventory Status</th>
+                                <th>Open POs</th>
+                                <th class="">At Risk Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <?php foreach ($array_to_pfr as $key => $value) { ?>
+
+
+
+                                <tr>
+                                    <td>
+                                        <div><strong><?php echo $array_to_pfr[$key]['ITEM']; ?></strong></div>
+                                        <div class="small text-muted"><?php echo $array_to_pfr[$key]['ITEM_DESC']; ?></div>
+                                        <div class="small text-muted">Whse: <?php echo $array_to_pfr[$key]['whse_string']; ?></div>
+                                    </td>
+                                    <td class="">
+                                        <div>Units Available: <strong><?php echo $array_to_pfr[$key]['inv_onhand']; ?></strong></div>
+                                        <div>Units on Order: <strong><?php echo $array_to_pfr[$key]['inv_onorder']; ?></strong></div>
+                                        <div>Units on Backorder: <strong><?php echo $array_to_pfr[$key]['inv_boq']; ?></strong></div>
+                                    </td>
+                                    <td>
+                                        <div class="clearfix">
+                                            <div class="float-left">
+                                                <strong>Oldest PO Date: <?php echo ($array_to_pfr[$key]['PODATE'] == 'N/A' ? 'N/A' : date('M j, Y', strtotime($array_to_pfr[$key]['PODATE']))); ?></strong>
+                                            </div>
+                                            <div class="float-right">
+                                                <small class="text-muted">Projected Due Date: <strong><?php echo ($array_to_pfr[$key]['DATE_EXPECTED'] == 'N/A' ? 'N/A' : date('M j, Y', strtotime($array_to_pfr[$key]['DATE_EXPECTED']))) . ' - ' . ($array_to_pfr[$key]['DATE_LATEST'] == 'N/A' ? 'N/A' : date('M j, Y', strtotime($array_to_pfr[$key]['DATE_LATEST']))); ?></strong></small>
+                                            </div>
+                                        </div>
+                                        <div class="progress progress-xs">
+                                            <div class="progress-bar <?php echo $array_to_pfr[$key]['color_prgbar'] ?>" role="progressbar" style="width: <?php echo $array_to_pfr[$key]['perc_remain'] ?>%" aria-valuenow="<?php echo $array_to_pfr[$key]['perc_remain'] ?>" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </td>
+                                    <td class="">
+                                        <div><strong><?php echo $array_to_pfr[$key]['atrisk']; ?></strong><?php echo $array_to_pfr[$key]['atrisk_desc']; ?></div>
+                                        <div>Estimated Fill Rate Hits: Between <strong><?php echo $array_to_pfr[$key]['frhits_expected'] . ' and ' . $array_to_pfr[$key]['frhits_max']; ?></strong></div>
+                                    </td>
+
+                                </tr>
+
+                            <?php } ?>
+                        </tbody>
+                    </table>
+
                     <!--prescriptive stats(how can we make it happen?)-->
                 </section>
             </section>

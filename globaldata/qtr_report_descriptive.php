@@ -1,6 +1,6 @@
 <?php
 include_once 'connection/connection_details.php';
-include_once '../globalfunctions/custdbfunctions.php';
+//include_once '../globalfunctions/custdbfunctions.php';
 
 $custcount = $conn1->prepare("SELECT 
                                                                 COUNT(*) as CUST_COUNT,
