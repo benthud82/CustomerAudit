@@ -44,7 +44,7 @@
                         <?php include 'algorithms/qtr_report_topfr.php'; ?>
                     </div>
 
-                    <table class="table table-responsive-sm table-hover table-outline mb-0">
+                    <table class="table table-responsive-sm table-outline mb-0">
                         <thead class="thead-light">
                             <tr>
 
@@ -60,7 +60,7 @@
 
 
 
-                                <tr>
+                            <tr style="background-color: <?php echo $array_to_pfr[$key]['back_color'];  ?>;">
                                     <td>
                                         <div><strong><?php echo $array_to_pfr[$key]['ITEM']; ?></strong></div>
                                         <div class="small text-muted"><?php echo $array_to_pfr[$key]['ITEM_DESC']; ?></div>
