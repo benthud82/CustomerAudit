@@ -5,7 +5,35 @@
     ?>
     <head>
         <title>Large Customer Quarterly Report</title>
-        <?php include_once 'headerincludes.php'; ?>
+
+        <meta charset="utf-8">
+
+        <script src="js/offsys_dash.js" type="text/javascript"></script>
+        <script src="js/globalscripts.js" type="text/javascript"></script>
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <!--<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">-->
+
+
+        <script type="text/javascript" src="https://cdn.datatables.net/v/bs-3.3.6/jq-2.2.3/pdfmake-0.1.18/dt-1.10.12/af-2.1.2/b-1.2.2/b-colvis-1.2.2/b-flash-1.2.2/b-html5-1.2.2/b-print-1.2.2/cr-1.3.2/fh-3.1.2/kt-2.1.3/r-2.1.0/rr-1.1.2/sc-1.4.2/se-1.2.0/datatables.min.js"></script>
+        <!--<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs-3.3.6/pdfmake-0.1.18/dt-1.10.12/af-2.1.2/b-1.2.2/b-colvis-1.2.2/b-flash-1.2.2/b-html5-1.2.2/b-print-1.2.2/cr-1.3.2/fh-3.1.2/kt-2.1.3/r-2.1.0/rr-1.1.2/sc-1.4.2/se-1.2.0/datatables.min.css"/>-->
+
+<!--<script src="../highcharts.js" type="text/javascript"></script>-->
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <link rel="shortcut icon" type="image/ico" href="../favicon.ico" />  
+        <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">-->
+        <link href="osscss/offsys_dash.css" rel="stylesheet" type="text/css"/>
+        <!--<link href="osscss/offsys_personal.css" rel="stylesheet" type="text/css"/>-->
+        <script src="js/jszip.js" type="text/javascript"></script>
+        <!--<style type="text/css">.jqstooltip { position: absolute;left: 0px;top: 0px;visibility: hidden;background: rgb(0, 0, 0) transparent;background-color: rgba(0,0,0,0.6);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000);-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000)";color: white;font: 10px arial, san serif;text-align: left;white-space: nowrap;padding: 5px;border: 1px solid white;z-index: 10000;}.jqsfield { color: white;font: 10px arial, san serif;text-align: left;}</style>-->
+        <!--<link href="../BootstrapXL.css" rel="stylesheet" type="text/css"/>-->
+        <script src="https://code.highcharts.com/highcharts.src.js"></script>
+        <script src="../highcharts-more.js" type="text/javascript"></script>
+        <script src="../jquery-ui.js"></script>
+
+        <!--        <link rel="stylesheet" type="text/css" href="osscss/print.css" media="print">-->
+
         <?php include_once 'functions/customer_audit_functions.php'; ?>
         <link rel="stylesheet" type="text/css" href="osscss/print.css" media="print">
         <style>
@@ -24,76 +52,86 @@
                 <section class="main padder"> 
 
                     <!--descriptive stats (what happened?)-->
-                    <?php include 'globaldata/qtr_report_descriptive.php'; ?>
-                    <div id="gauge_custtrend" style="min-width: 310px; max-width: 400px; height: 300px; margin: 0 auto"></div>
-                    <div id="ctn_scorehistogram"></div>
-                    <div id="ctn_top3salesplans">
-                        <div class="h2" style="margin-left: 50px;">High Impact Salesplan Performance</div>
-                        <?php include 'globaldata/top3salesplans.php'; ?>
+                    <div class="row">
+                        <?php include 'globaldata/qtr_report_descriptive.php'; ?>
+                        <div class="col-xs-6">
+                            <div id="gauge_custtrend" style="min-width: 310px; max-width: 300px; height: 225px; margin: 0 auto"></div>
+                        </div>
                     </div>
+                    <div class="" id="ctn_scorehistogram" style="width: 800px; height: 600px;"></div>
+
 
                     <!--diagnostic stats (why did it happen / what did our team do?)-->
-                    <div id="ctn_custauditcount">
+                    <div id="ctn_custauditcount" class="pagebreak_before">
                         <div class="h2" style="margin-left: 50px;">Audits Performed</div>
                         <?php include 'globaldata/cust_audit_count.php'; ?>
                     </div>
-                    <a href="algorithms/qtr_report_topfr.php"></a>
-                    <!--predictive stats(what will happen next?)-->
-                    <div id="pred_top_fr">
-                        <div class="h2" style="margin-left: 50px;">Top 10 Fill Rate Opportunities</div>
-                        <?php include 'algorithms/qtr_report_topfr.php'; ?>
+                    <div id="ctn_top3salesplans" class=" ">
+                        <div class="h2" style="margin-left: 50px;">High Impact Salesplan Performance</div>
+                        <?php include 'globaldata/top3salesplans.php'; ?>
                     </div>
+                    <!--predictive stats(what will happen next?)-->
+                    <div class="pagebreak_before" >
 
-                    <table class="table table-responsive-sm table-outline mb-0">
-                        <thead class="thead-light">
-                            <tr>
+                        <div class="progress-group">
+                            <div class="progress-group-header">
+                                <i class="icon-user progress-group-icon"></i>
+                                <div>Male</div>
+                                <div class="ml-auto font-weight-bold">43%</div>
+                            </div>
+                            <div class="progress-group-bars">
+                                <div class="progress progress-xs">
+                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 43%" aria-valuenow="43" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        </div>
 
-                                <th>Item</th>
-                                <th class="">Inventory Status</th>
-                                <th>Open POs</th>
-                                <th class="">At Risk Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                        <div id="pred_top_fr">
+                            <div class="h2" style="margin-left: 50px;">Top 10 Fill Rate Opportunities</div>
+                            <?php include 'algorithms/qtr_report_topfr.php'; ?>
+                        </div>
 
-                            <?php foreach ($array_to_pfr as $key => $value) { ?>
+                        <table class="table" style="">
+                            <tbody>
 
+                                <?php foreach ($array_to_pfr as $key => $value) { ?>
+                                    <tr>
+                                        <td>
+                                            <div><strong><?php echo $array_to_pfr[$key]['ITEM']; ?></strong></div>
+                                            <div class="small text-muted"><?php echo $array_to_pfr[$key]['ITEM_DESC']; ?></div>
+                                            <div class="small text-muted">Whse: <?php echo $array_to_pfr[$key]['whse_string']; ?></div>
+                                        </td>
+                                        <td class="text-small">
+                                            <div>Units Available: <strong><?php echo $array_to_pfr[$key]['inv_onhand']; ?></strong></div>
+                                            <div>Units on Order: <strong><?php echo $array_to_pfr[$key]['inv_onorder']; ?></strong></div>
+                                            <div>Units on Backorder: <strong><?php echo $array_to_pfr[$key]['inv_boq']; ?></strong></div>
+                                        </td>
 
-
-                            <tr style="background-color: <?php echo $array_to_pfr[$key]['back_color'];  ?>;">
-                                    <td>
-                                        <div><strong><?php echo $array_to_pfr[$key]['ITEM']; ?></strong></div>
-                                        <div class="small text-muted"><?php echo $array_to_pfr[$key]['ITEM_DESC']; ?></div>
-                                        <div class="small text-muted">Whse: <?php echo $array_to_pfr[$key]['whse_string']; ?></div>
-                                    </td>
-                                    <td class="">
-                                        <div>Units Available: <strong><?php echo $array_to_pfr[$key]['inv_onhand']; ?></strong></div>
-                                        <div>Units on Order: <strong><?php echo $array_to_pfr[$key]['inv_onorder']; ?></strong></div>
-                                        <div>Units on Backorder: <strong><?php echo $array_to_pfr[$key]['inv_boq']; ?></strong></div>
-                                    </td>
-                                    <td>
-                                        <div class="clearfix">
-                                            <div class="float-left">
-                                                <strong>Oldest PO Date: <?php echo ($array_to_pfr[$key]['PODATE'] == 'N/A' ? 'N/A' : date('M j, Y', strtotime($array_to_pfr[$key]['PODATE']))); ?></strong>
+                                        <td class="">
+                                            <div><strong><?php echo $array_to_pfr[$key]['atrisk']; ?></strong><?php echo $array_to_pfr[$key]['atrisk_desc']; ?></div>
+                                            <div>Estimated Fill Rate Hits: Between <strong><?php echo $array_to_pfr[$key]['frhits_expected'] . ' and ' . $array_to_pfr[$key]['frhits_max']; ?></strong></div>
+                                        </td>
+                                    </tr>
+                                    <tr class="<?php echo $array_to_pfr[$key]['table_class']; ?>" style="margin-bottom: 25px;">
+                                        <td colspan="3">    
+                                            <div class="">
+                                                <div class="">
+                                                    <strong>Oldest PO Date: <?php echo ($array_to_pfr[$key]['PODATE'] == 'N/A' ? 'N/A' : date('M j, Y', strtotime($array_to_pfr[$key]['PODATE']))); ?></strong>
+                                                </div>
+                                                <div class="">
+                                                    <small class="text-muted">Projected Due Date: <strong><?php echo ($array_to_pfr[$key]['DATE_EXPECTED'] == 'N/A' ? 'N/A' : date('M j, Y', strtotime($array_to_pfr[$key]['DATE_EXPECTED']))) . ' - ' . ($array_to_pfr[$key]['DATE_LATEST'] == 'N/A' ? 'N/A' : date('M j, Y', strtotime($array_to_pfr[$key]['DATE_LATEST']))); ?></strong></small>
+                                                </div>
                                             </div>
-                                            <div class="float-right">
-                                                <small class="text-muted">Projected Due Date: <strong><?php echo ($array_to_pfr[$key]['DATE_EXPECTED'] == 'N/A' ? 'N/A' : date('M j, Y', strtotime($array_to_pfr[$key]['DATE_EXPECTED']))) . ' - ' . ($array_to_pfr[$key]['DATE_LATEST'] == 'N/A' ? 'N/A' : date('M j, Y', strtotime($array_to_pfr[$key]['DATE_LATEST']))); ?></strong></small>
+                                            <div class="progress progress-xs">
+                                                <div class="progress-bar <?php echo $array_to_pfr[$key]['color_prgbar'] ?>" role="progressbar" style="width: <?php echo $array_to_pfr[$key]['perc_remain'] ?>%" aria-valuenow="<?php echo $array_to_pfr[$key]['perc_remain'] ?>" aria-valuemin="0" aria-valuemax="100"></div>
                                             </div>
-                                        </div>
-                                        <div class="progress progress-xs">
-                                            <div class="progress-bar <?php echo $array_to_pfr[$key]['color_prgbar'] ?>" role="progressbar" style="width: <?php echo $array_to_pfr[$key]['perc_remain'] ?>%" aria-valuenow="<?php echo $array_to_pfr[$key]['perc_remain'] ?>" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </td>
-                                    <td class="">
-                                        <div><strong><?php echo $array_to_pfr[$key]['atrisk']; ?></strong><?php echo $array_to_pfr[$key]['atrisk_desc']; ?></div>
-                                        <div>Estimated Fill Rate Hits: Between <strong><?php echo $array_to_pfr[$key]['frhits_expected'] . ' and ' . $array_to_pfr[$key]['frhits_max']; ?></strong></div>
-                                    </td>
+                                        </td>
+                                    </tr>
 
-                                </tr>
-
-                            <?php } ?>
-                        </tbody>
-                    </table>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                    </div>
 
                     <!--prescriptive stats(how can we make it happen?)-->
                 </section>
@@ -113,7 +151,7 @@
                         enabled: false
                     },
                     title: {
-                        text: 'Customer Score Trend'
+                        text: ' '
                     },
 
                     pane: {
@@ -225,6 +263,9 @@
                                 credits: {
                                     enabled: false
                                 },
+                                legend: {
+                                    enabled: false
+                                },
                                 plotOptions: {
                                     series: {
                                         dataLabels: {
@@ -233,7 +274,7 @@
                                     }
                                 },
                                 title: {
-                                    text: ' '
+                                    text: 'Large Customer Scores - Histogram'
                                 },
                                 xAxis: {
                                     categories: [],
@@ -252,7 +293,7 @@
                                     minTickInterval: 1,
                                     legend: {
                                         y: "10",
-                                        x: "5"
+                                        x: "5",
                                     }
 
                                 },

@@ -1,5 +1,6 @@
 
 @media print {
+
     @page {size: landscape}
     -webkit-print-color-adjust: exact;
     .printheading, .printheading *{
@@ -10,6 +11,10 @@
         -webkit-transform: rotate(90deg); 
         -moz-transform:rotate(90deg);
         filter:progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
+        display: block;
+        /*width: 100%;*/
+        page-break-after: always;
+        break-after: always;
     }
 
     .col-print-1 {width:8%;  float:left;}
@@ -48,6 +53,19 @@
     .text-center{
         text-align: center;
     }
-    
+    .pagebreak_before { page-break-before: always; } /* page-break-after works, as well */
+
+    .table>tbody>tr>td{
+        padding: 5px;
+    }
+
+    body {
+        -webkit-print-color-adjust: exact !important;
+    }
+
+    .table-red{
+        background-color:#fce3e7 !important;
+        -webkit-print-color-adjust: exact !important;
+    }
 
 }
