@@ -69,4 +69,8 @@
         -webkit-print-color-adjust: exact !important;
     }
 
+    tr.spaceUnder>td {
+        padding-bottom: 10px !important;
+    }
+
 }

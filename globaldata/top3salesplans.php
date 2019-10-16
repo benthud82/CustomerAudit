@@ -27,30 +27,32 @@ $top3_sql = $conn1->prepare("SELECT DISTINCT
                                 custaudit.salesplan_desc ON S.SALESPLAN = SPDESC_SALESPLAN
                             WHERE
                                 S.RECORDDATE BETWEEN DATE_SUB(NOW(), INTERVAL 93 DAY) AND DATE_SUB(NOW(), INTERVAL 87 DAY)
-                            GROUP BY S.SALESPLAN , SPDESC_DESC");
+                            GROUP BY S.SALESPLAN , SPDESC_DESC
+                            ORDER BY S.SALESPLAN asc");
 $top3_sql->execute();
 $top3_array = $top3_sql->fetchAll(pdo::FETCH_ASSOC);
 
 //top3 drivers of score increase/decrease
 $driver_sql = $conn1->prepare("SELECT 
-                                                                SALESPLAN,
-                                                                SLOPE90DAY_EXCLDS,
-                                                                SLOPEBO90DAY,
-                                                                SLOPEXD90DAY,
-                                                                SLOPEXE90DAY,
-                                                                SLOPEXS90DAY,
-                                                                SLOPEBEFFRQTR,
-                                                                SLOPEAFTFRQTR,
-                                                                SLOPEOSCQUARTER
-                                                            FROM
-                                                                custaudit.custscoresbyday_salesplan
-                                                                    JOIN
-                                                                custaudit.qtrreport_top3 ON top3_salesplan = SALESPLAN
-                                                            WHERE
-                                                                RECORDDATE = (SELECT 
-                                                                        MAX(RECORDDATE)
-                                                                    FROM
-                                                                        custaudit.custscoresbyday_salesplan)");
+                                SALESPLAN,
+                                SLOPE90DAY_EXCLDS,
+                                SLOPEBO90DAY,
+                                SLOPEXD90DAY,
+                                SLOPEXE90DAY,
+                                SLOPEXS90DAY,
+                                SLOPEBEFFRQTR,
+                                SLOPEAFTFRQTR,
+                                SLOPEOSCQUARTER
+                            FROM
+                                custaudit.custscoresbyday_salesplan
+                                    JOIN
+                                custaudit.qtrreport_top3 ON top3_salesplan = SALESPLAN
+                            WHERE
+                                RECORDDATE = (SELECT 
+                                        MAX(RECORDDATE)
+                                    FROM
+                                        custaudit.custscoresbyday_salesplan)
+                            ORDER BY SALESPLAN asc");
 $driver_sql->execute();
 $driver_array = $driver_sql->fetchAll(pdo::FETCH_ASSOC);
 
@@ -141,10 +143,10 @@ foreach ($top3_array as $key => $value) {
         $salesplan_desc = $top3_array[$key]['SPDESC_DESC'];
         $currscore = $top3_array[$key]['CURRSCORE'];
         $histscore = $top3_array[$key]['HISTSCORE'];
-        if($currscore < $histscore){
-            $headerclass = 'bg-danger';
-        } else{
-            $headerclass = 'bg-success';
+        if ($currscore < $histscore) {
+            $headerclass = 'danger';
+        } else {
+            $headerclass = 'success';
         }
         //pull in driver data
         foreach ($driverlookuparray as $driverkey => $value) {
@@ -156,12 +158,12 @@ foreach ($top3_array as $key => $value) {
 
         if ($currscore > $histscore) {
             $scoredif = $currscore - $histscore;
-            $statement = " <strong>increased </strong> by $scoredif points from $histscore last quarter to $currscore this quarter";
+            $statement = " <strong> increased </strong> by $scoredif points to $currscore this quarter from $histscore last quarter.";
         } elseif ($currscore < $histscore) {
             $scoredif = $histscore - $currscore;
-            $statement = "<strong>decreased </strong> by  $scoredif points from $histscore last quarter to $currscore this quarter";
+            $statement = "<strong> decreased </strong> by  $scoredif points to $currscore this quarter from $histscore last quarter.";
         } else {
-            $statement = " was <strong> stagnant </strong> at a score of $currscore for both last quarter and this quarter";
+            $statement = " was <strong> stagnant </strong> at a score of $currscore for both last quarter and this quarter.";
         }
 
         //find billto/shipto combinations in salesplan table
@@ -185,13 +187,11 @@ foreach ($top3_array as $key => $value) {
         $fillratecolumns = $result1->fetchAll(pdo::FETCH_COLUMN);
 
         $fillrates = implode(",", $fillratecolumns);
-
-//        echo "The quarterly score for $salesplan $statement.  $driver_stmt";
         ?>
 
 
         <div class="brand-card">
-            <div class="brand-card-header <?php echo $headerclass ?>">
+            <div class="brand-card-header bg-<?php echo $headerclass ?>">
                 <div class="h4" style="color: white;"><?php echo $salesplan . ' | ' . $salesplan_desc ?></div>
 
             </div>
@@ -205,29 +205,21 @@ foreach ($top3_array as $key => $value) {
                     <div class="text-uppercase text-muted small">Last Qtr Score</div>
                 </div>
             </div>
-                            <div class="chart-wrapper mx-auto" style="">
-
-                    <span id="sparkline<?php echo $key; ?>" style="width: 100px; height: 50px;"><?php echo $fillrates ?></span>
+            <div class="col-xs-12">
+                <div class="callout callout-<?php echo $headerclass ?>">
+                    <div><?php echo "The quarterly score for " . $salesplan . $statement; ?></div>
+                    <div><?php echo $driver_stmt; ?></div>
                 </div>
-        </div>
-
-
-
-
-
-
-
-<!--        <div class="card">
-            <div class="card-header"><?php // echo $salesplan . ' | ' . $salesplan_desc ?></div>
-            <div class="card-body text-center">
-                <div class="text-muted small text-uppercase font-weight-bold">Current Score</div>
-                <div class="text-value-lg py-3"><?php // echo $currscore ?></div>
-
             </div>
-        </div>-->
-        <!--</div>-->
-
+            <div class="chart-wrapper mx-auto" style="">
+                <span id="sparkline<?php echo $key; ?>"><?php echo $fillrates ?></span>
+                <div class="text-uppercase text-muted small text-center" style="margin: 5px;">Rolling 12 month after fill rate</div>
+            </div>
+        </div>
     </div>
+
+
+
 
     <?php
 }
