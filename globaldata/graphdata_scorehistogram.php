@@ -4,14 +4,14 @@ include_once '../connection/connection_details.php';
 
 $result1 = $conn1->prepare("SELECT 
                                                     CONCAT('>= ',
-                                                            CAST(ROUND(SCOREQUARTER, 1) * 100 AS UNSIGNED)) AS BUCKET,
+                                                            CAST(ROUND(SCOREQUARTER_EXCLDS, 1) * 100 AS UNSIGNED)) AS BUCKET,
                                                     COUNT(*) AS CUST_COUNT
                                                 FROM
                                                     custaudit.scorecard_display_salesplan
                                                 WHERE
                                                     TOTR12SALES >= 500000
                                                 GROUP BY bucket
-                                                ORDER BY bucket;");
+                                                ORDER BY CAST(ROUND(SCOREQUARTER_EXCLDS, 1) * 100 AS UNSIGNED) * 1 asc;");
 $result1->execute();
 
 
