@@ -1,5 +1,6 @@
 
 @media print {
+
     @page {size: landscape}
     -webkit-print-color-adjust: exact;
     .printheading, .printheading *{
@@ -10,6 +11,10 @@
         -webkit-transform: rotate(90deg); 
         -moz-transform:rotate(90deg);
         filter:progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
+        display: block;
+        /*width: 100%;*/
+        page-break-after: always;
+        break-after: always;
     }
 
     .col-print-1 {width:8%;  float:left;}
@@ -24,7 +29,8 @@
     .col-print-10{width:83%; float:left;}
     .col-print-11{width:92%; float:left;}
     .col-print-12{width: 100%; float:left;}
-
+    .col-xs-3{-ms-flex:0 0 25%;flex:0 0 25%;max-width:25%}
+    .col-xs-6{-ms-flex:0 0 50%;flex:0 0 50%;max-width:50%}
     .printwidth800{
         width: 800px;
     }
@@ -48,6 +54,19 @@
     .text-center{
         text-align: center;
     }
-    
+    .pagebreak_before { page-break-before: always; } /* page-break-after works, as well */
+
+    .table>tbody>tr>td{
+        padding: 5px;
+    }
+
+    body {
+        -webkit-print-color-adjust: exact !important;
+    }
+
+    .table-red{
+        background-color:#fce3e7 !important;
+        -webkit-print-color-adjust: exact !important;
+    }
 
 }

@@ -260,55 +260,61 @@ function _atrisk_desc($atrisk_scenario, $AVG_DAILY_PICKS, $date_expected, $date_
     switch ($atrisk_scenario) {
         case 1: //still on BO with 0 onhand
             $desc = 'Item is currently taking additional customer backorders.';
-            $atrisk = 'At Risk | ';
+            $atrisk = 'At Risk';
             $resolutiondays_exp = getWorkingDays($today, $date_expected, $holidays);
             $resolutiondays_latest = getWorkingDays($today, $date_latest, $holidays);
 
             $hits_exp = $resolutiondays_exp * $AVG_DAILY_PICKS;
             $hits_max = $resolutiondays_latest * $AVG_DAILY_PICKS;
             $backgroundcolor = '#fce3e7';
+            $table_class = 'table-red';
             break;
         case 2: //0 onhand, 0 on BO
             $desc = 'Item has 0 units available, but currently not taking backorders.';
-            $atrisk = 'At Risk | ';
+            $atrisk = 'At Risk';
             $resolutiondays_exp = getWorkingDays($today, $date_expected, $holidays);
             $resolutiondays_latest = getWorkingDays($today, $date_latest, $holidays);
             $hits_exp = $resolutiondays_exp * $AVG_DAILY_PICKS;
             $hits_max = $resolutiondays_latest * $AVG_DAILY_PICKS;
             $backgroundcolor = '#fce3e7';
+            $table_class = 'table-red';
             break;
         case 3: //onhand is greater than boq, but quantity is still on boq. Should be cleared very soon
-            $desc = 'Item now has units available.  Backorder quantity should be released soon.';
-            $atrisk = 'Not At Risk | ';
+            $desc = 'Item is available.  Backorder quantity should be released soon.';
+            $atrisk = 'Not At Risk';
 
             $hits_exp = 0;
             $hits_max = 0;
             $backgroundcolor = 'white';
+            $table_class = ' ';
             break;
         case 99: //item is not at risk
-            $desc = ' ';
+            $desc = 'No longer on customer BO.';
             $atrisk = 'Not At Risk';
 
             $hits_exp = 0;
             $hits_max = 0;
             $backgroundcolor = 'white';
+            $table_class = ' ';
             break;
         case 0: //did not meet a scenario (default)
-            $desc = ' ';
+            $desc = 'No longer on customer BO.';
             $atrisk = 'Not At Risk';
 
             $hits_exp = 0;
             $hits_max = 0;
             $backgroundcolor = 'white';
+            $table_class = ' ';
             break;
 
         default:
-            $desc = ' ';
+            $desc = 'No longer on customer BO.';
             $atrisk = 'Not At Risk';
 
             $hits_exp = 0;
             $hits_max = 0;
             $backgroundcolor = 'white';
+            $table_class = ' ';
             break;
     }
 
@@ -338,7 +344,7 @@ function _atrisk_desc($atrisk_scenario, $AVG_DAILY_PICKS, $date_expected, $date_
         $perc_remain = 0;
     }
 
-    $atrisk_array = array($atrisk, $desc, $hits_exp, $hits_max, $color_prgbar, $perc_remain, $backgroundcolor);
+    $atrisk_array = array($atrisk, $desc, $hits_exp, $hits_max, $color_prgbar, $perc_remain, $backgroundcolor, $table_class);
     return $atrisk_array;
 }
 

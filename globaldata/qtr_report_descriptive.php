@@ -36,13 +36,15 @@ $totalscorearray = array_column($scorearray, 'AVG_SP');
 $totalscoretrend = linear_regression($rankarray, $totalscorearray);
 $totalscoretrend_m = $totalscoretrend['m'];
 ?> 
-<div class="row">
-    <?php echo 'Total number of customers tracked: ' . $custcount_array[0]['CUST_COUNT']; ?>
-</div>
-<div class="row">
-    <?php echo 'Average quarterly score: ' . intval($custcount_array[0]['AVG_SCORE'] * 100); ?>
-</div>
-<div class="row">
-    <?php echo 'The average score trend: ' . intval($totalscoretrend_m * 100); ?>
+<div class="col-xs-6" style="padding-top: 30px">
+    <div class="row">
+        <h4> <?php echo 'Total number of customers tracked: ' . $custcount_array[0]['CUST_COUNT']; ?> </h4>
+    </div>
+    <div class="row">
+        <h4>  <?php echo 'Average quarterly score: ' . intval($custcount_array[0]['AVG_SCORE'] * 100); ?> </h4>
+    </div>
+    <div class="row">
+        <h4>  <?php echo 'The average score trend: ' . intval($totalscoretrend_m * 100); ?> </h4>
+    </div>
 </div>
 

@@ -124,5 +124,6 @@ foreach ($array_to_pfr as $key => $value) {
     $array_to_pfr[$key]['color_prgbar'] = $atrisk_desc[4];
     $array_to_pfr[$key]['perc_remain'] = $atrisk_desc[5];
     $array_to_pfr[$key]['back_color'] = $atrisk_desc[6];
+    $array_to_pfr[$key]['table_class'] = $atrisk_desc[7];
 }
 
