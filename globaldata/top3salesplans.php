@@ -9,9 +9,9 @@ $endfisc = _currentmonthfiscal();
 $top3_sql = $conn1->prepare("SELECT DISTINCT
                                 S.SALESPLAN,
                                 SPDESC_DESC,
-                                CAST(AVG(S.SCOREQUARTER_EXCLDS) * 100 AS UNSIGNED) AS HISTSCORE,
+                                CAST(AVG(S.SCOREMONTH_EXCLDS) * 100 AS UNSIGNED) AS HISTSCORE,
                                 CAST((SELECT 
-                                            X.SCOREQUARTER_EXCLDS
+                                            X.SCOREMONTH_EXCLDS
                                         FROM
                                             custaudit.custscoresbyday_salesplan X
                                         WHERE
