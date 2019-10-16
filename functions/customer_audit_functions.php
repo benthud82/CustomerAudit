@@ -260,7 +260,7 @@ function _atrisk_desc($atrisk_scenario, $AVG_DAILY_PICKS, $date_expected, $date_
     switch ($atrisk_scenario) {
         case 1: //still on BO with 0 onhand
             $desc = 'Item is currently taking additional customer backorders.';
-            $atrisk = 'At Risk | ';
+            $atrisk = 'At Risk';
             $resolutiondays_exp = getWorkingDays($today, $date_expected, $holidays);
             $resolutiondays_latest = getWorkingDays($today, $date_latest, $holidays);
 
@@ -271,7 +271,7 @@ function _atrisk_desc($atrisk_scenario, $AVG_DAILY_PICKS, $date_expected, $date_
             break;
         case 2: //0 onhand, 0 on BO
             $desc = 'Item has 0 units available, but currently not taking backorders.';
-            $atrisk = 'At Risk | ';
+            $atrisk = 'At Risk';
             $resolutiondays_exp = getWorkingDays($today, $date_expected, $holidays);
             $resolutiondays_latest = getWorkingDays($today, $date_latest, $holidays);
             $hits_exp = $resolutiondays_exp * $AVG_DAILY_PICKS;
@@ -281,7 +281,7 @@ function _atrisk_desc($atrisk_scenario, $AVG_DAILY_PICKS, $date_expected, $date_
             break;
         case 3: //onhand is greater than boq, but quantity is still on boq. Should be cleared very soon
             $desc = 'Item is available.  Backorder quantity should be released soon.';
-            $atrisk = 'Not At Risk | ';
+            $atrisk = 'Not At Risk';
 
             $hits_exp = 0;
             $hits_max = 0;
@@ -289,7 +289,7 @@ function _atrisk_desc($atrisk_scenario, $AVG_DAILY_PICKS, $date_expected, $date_
             $table_class = ' ';
             break;
         case 99: //item is not at risk
-            $desc = ' ';
+            $desc = 'No longer on customer BO.';
             $atrisk = 'Not At Risk';
 
             $hits_exp = 0;
@@ -298,7 +298,7 @@ function _atrisk_desc($atrisk_scenario, $AVG_DAILY_PICKS, $date_expected, $date_
             $table_class = ' ';
             break;
         case 0: //did not meet a scenario (default)
-            $desc = ' ';
+            $desc = 'No longer on customer BO.';
             $atrisk = 'Not At Risk';
 
             $hits_exp = 0;
@@ -308,7 +308,7 @@ function _atrisk_desc($atrisk_scenario, $AVG_DAILY_PICKS, $date_expected, $date_
             break;
 
         default:
-            $desc = ' ';
+            $desc = 'No longer on customer BO.';
             $atrisk = 'Not At Risk';
 
             $hits_exp = 0;
