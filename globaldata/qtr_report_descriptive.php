@@ -4,7 +4,7 @@ include_once 'connection/connection_details.php';
 
 $custcount = $conn1->prepare("SELECT 
                                                                 COUNT(*) as CUST_COUNT,
-                                                                AVG(SCOREQUARTER) as AVG_SCORE
+                                                                AVG(SCOREQUARTER_EXCLDS) as AVG_SCORE
                                                             FROM
                                                                 custaudit.scorecard_display_salesplan
                                                             WHERE
