@@ -255,16 +255,28 @@ function _atrisk($inv_onhand, $inv_boq) {
 }
 
 function _atrisk_desc($atrisk_scenario, $AVG_DAILY_PICKS, $date_expected, $date_latest, $today, $PODATE) {
-    $atrisk_array = array();
+//    $atrisk_array = array();
     $holidays = array();
     switch ($atrisk_scenario) {
         case 1: //still on BO with 0 onhand
-            $desc = 'Item is currently taking additional customer backorders.';
-            $atrisk = 'At Risk';
-            $resolutiondays_exp = getWorkingDays($today, $date_expected, $holidays);
-            $resolutiondays_latest = getWorkingDays($today, $date_latest, $holidays);
+            //POStatus
+            if ($today >= $date_latest) {
+                                $resolutiondays_latest = getWorkingDays($today, $date_latest, $holidays);
+                $atrisk = 'At Risk | PO is late or delayed';
+                $hits_exp = $AVG_DAILY_PICKS;
+                $desc = 'Item is currently taking additional customer backorders.';
+                $desc2 = '<strong>' . $hits_exp . '</strong> expected fill rate hits per day till received.';
+            } else {
+                $resolutiondays_exp = getWorkingDays($today, $date_expected, $holidays);
+                $resolutiondays_latest = getWorkingDays($today, $date_latest, $holidays);
+                $atrisk = 'At Risk';
+                $hits_exp = $AVG_DAILY_PICKS;
+                $desc = 'Item is currently taking additional customer backorders.';
+                $desc2 = '<strong>' . $hits_exp . '</strong> expected fill rate hits per day till received.';
+            }
 
-            $hits_exp = $resolutiondays_exp * $AVG_DAILY_PICKS;
+
+
             $hits_max = $resolutiondays_latest * $AVG_DAILY_PICKS;
             $backgroundcolor = '#fce3e7';
             $table_class = 'table-red';
@@ -276,13 +288,14 @@ function _atrisk_desc($atrisk_scenario, $AVG_DAILY_PICKS, $date_expected, $date_
             $resolutiondays_latest = getWorkingDays($today, $date_latest, $holidays);
             $hits_exp = $resolutiondays_exp * $AVG_DAILY_PICKS;
             $hits_max = $resolutiondays_latest * $AVG_DAILY_PICKS;
+            $desc2 = '';
             $backgroundcolor = '#fce3e7';
             $table_class = 'table-red';
             break;
         case 3: //onhand is greater than boq, but quantity is still on boq. Should be cleared very soon
             $desc = 'Item is available.  Backorder quantity should be released soon.';
             $atrisk = 'Not At Risk';
-
+            $desc2 = '';
             $hits_exp = 0;
             $hits_max = 0;
             $backgroundcolor = 'white';
@@ -291,7 +304,7 @@ function _atrisk_desc($atrisk_scenario, $AVG_DAILY_PICKS, $date_expected, $date_
         case 99: //item is not at risk
             $desc = 'No longer on customer BO.';
             $atrisk = 'Not At Risk';
-
+            $desc2 = '';
             $hits_exp = 0;
             $hits_max = 0;
             $backgroundcolor = 'white';
@@ -300,7 +313,7 @@ function _atrisk_desc($atrisk_scenario, $AVG_DAILY_PICKS, $date_expected, $date_
         case 0: //did not meet a scenario (default)
             $desc = 'No longer on customer BO.';
             $atrisk = 'Not At Risk';
-
+            $desc2 = '';
             $hits_exp = 0;
             $hits_max = 0;
             $backgroundcolor = 'white';
@@ -310,7 +323,7 @@ function _atrisk_desc($atrisk_scenario, $AVG_DAILY_PICKS, $date_expected, $date_
         default:
             $desc = 'No longer on customer BO.';
             $atrisk = 'Not At Risk';
-
+            $desc2 = '';
             $hits_exp = 0;
             $hits_max = 0;
             $backgroundcolor = 'white';
@@ -344,7 +357,7 @@ function _atrisk_desc($atrisk_scenario, $AVG_DAILY_PICKS, $date_expected, $date_
         $perc_remain = 0;
     }
 
-    $atrisk_array = array($atrisk, $desc, $hits_exp, $hits_max, $color_prgbar, $perc_remain, $backgroundcolor, $table_class);
+    $atrisk_array = array($atrisk, $desc, $hits_exp, $hits_max, $color_prgbar, $perc_remain, $backgroundcolor, $table_class, $desc2);
     return $atrisk_array;
 }
 
