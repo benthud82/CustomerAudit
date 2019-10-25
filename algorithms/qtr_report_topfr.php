@@ -51,6 +51,7 @@ $sql_top_fr = $conn1->prepare("SELECT
                                 WHERE
                                     OR_DATE >= $rollqtrjdate AND item_flu IS NULL
                                         AND mfgbo_item IS NULL
+                                        and inv_boq > 10
                                 GROUP BY INV_PWHS , A.ITEM, ITEM_DESC
                                 ORDER BY CNT_DC DESC
                                 LIMIT 10");
@@ -125,5 +126,6 @@ foreach ($array_to_pfr as $key => $value) {
     $array_to_pfr[$key]['perc_remain'] = $atrisk_desc[5];
     $array_to_pfr[$key]['back_color'] = $atrisk_desc[6];
     $array_to_pfr[$key]['table_class'] = $atrisk_desc[7];
+    $array_to_pfr[$key]['atrisk_desc2'] = $atrisk_desc[8];
 }
 

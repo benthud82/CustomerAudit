@@ -187,6 +187,11 @@ foreach ($top3_array as $key => $value) {
         $fillratecolumns = $result1->fetchAll(pdo::FETCH_COLUMN);
 
         $fillrates = implode(",", $fillratecolumns);
+
+        $colcount = count($fillratecolumns);
+        $endnum = $colcount - 1;
+        $fr_start = number_format($fillratecolumns[0] * 100, 2);
+        $fr_end = number_format($fillratecolumns[$endnum] * 100, 2);
         ?>
 
 
@@ -211,9 +216,18 @@ foreach ($top3_array as $key => $value) {
                     <div><?php echo $driver_stmt; ?></div>
                 </div>
             </div>
-            <div class="chart-wrapper mx-auto" style="">
+            <div class="chart-wrapper mx-auto" style="text-align: center">
                 <span id="sparkline<?php echo $key; ?>"><?php echo $fillrates ?></span>
-                <div class="text-uppercase text-muted small text-center" style="margin: 5px;">Rolling 12 month after fill rate</div>
+                <div class="col-xs-12">
+                    <div class="row">
+                        <div class="text-uppercase text-muted small text-center" style="margin: 5px;">
+                            <span style="margin-right: 5px;"><strong><?php echo 'START: ' . $fr_start . '%'; ?></strong></span>
+                            <span>Rolling 12 month after fill rate</span>
+                            <span style="margin-left: 5px;"><strong><?php echo 'END: ' . $fr_end . '%'; ?></strong></span>
+
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

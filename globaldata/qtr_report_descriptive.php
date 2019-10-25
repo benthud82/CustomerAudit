@@ -44,7 +44,10 @@ $totalscoretrend_m = $totalscoretrend['m'];
         <h4>  <?php echo 'Average quarterly score: ' . intval($custcount_array[0]['AVG_SCORE'] * 100); ?> </h4>
     </div>
     <div class="row">
-        <h4>  <?php echo 'The average score trend: ' . intval($totalscoretrend_m * 100); ?> </h4>
+        <h4>  <?php
+            $plusminus = ($totalscoretrend_m >= 0 ? '+' : '-');
+            echo 'The average score trend: ' . $plusminus . number_format($totalscoretrend_m * 100,1);
+            ?> </h4>
     </div>
 </div>
 

@@ -86,20 +86,20 @@
                                 <table class="table table-responsive-sm table-hover table-outline mb-0">
                                     <tbody>
                                         <?php foreach ($array_to_pfr as $key => $value) { ?>
-                                        <tr class="<?php echo $array_to_pfr[$key]['table_class']; ?>" style="margin-bottom: 10px;">
-                                            <td class="spaceUnder">
+                                            <tr class="<?php echo $array_to_pfr[$key]['table_class']; ?>" style="margin-bottom: 10px;">
+                                                <td class="spaceUnder">
                                                     <div><strong><?php echo $array_to_pfr[$key]['ITEM']; ?></strong></div>
                                                     <div class="small">
                                                         <div><?php echo $array_to_pfr[$key]['ITEM_DESC']; ?></div>
                                                         <div>Whse: <?php echo $array_to_pfr[$key]['whse_string']; ?></div> 
                                                     </div>
                                                 </td>
-                                               <td class="spaceUnder">
+                                                <td class="spaceUnder">
                                                     <div><strong>Units on Backorder: <?php echo $array_to_pfr[$key]['inv_boq']; ?></strong></div>
                                                     <div class="small">Units Available: <?php echo $array_to_pfr[$key]['inv_onhand']; ?> </div>
                                                     <div class="small">Units on Order: <?php echo $array_to_pfr[$key]['inv_onorder']; ?></div>
                                                 </td>
-                                               <td class="spaceUnder">
+                                                <td class="spaceUnder">
                                                     <div class="clearfix">
                                                         <div class="float-left">
                                                             <strong><?php echo $array_to_pfr[$key]['perc_remain'] ?>%</strong>
@@ -115,8 +115,7 @@
                                                 <td class="spaceUnder">
                                                     <div><strong><?php echo $array_to_pfr[$key]['atrisk']; ?></strong></div>
                                                     <div class="small"><?php echo $array_to_pfr[$key]['atrisk_desc']; ?></div>
-                                                    <!--<div class="small">Estimated Fill Rate Hits: Between <strong><?php // echo $array_to_pfr[$key]['frhits_expected'] . ' and ' . $array_to_pfr[$key]['frhits_max'];                       ?></strong></div>-->
-                                                    <div class="small"><?php echo($array_to_pfr[$key]['frhits_expected'] == 0 ? 'No additional fill rate hits expected' : 'Estimated <strong>additional</strong> fill rate hits between <strong>' . $array_to_pfr[$key]['frhits_expected'] . '</strong> and <strong>' . $array_to_pfr[$key]['frhits_max'] . '</strong>'); ?></strong></div>
+                                                    <div class="small"><?php echo $array_to_pfr[$key]['atrisk_desc2']; ?></div>
                                                 </td>
                                             </tr>
                                         <?php } ?>
