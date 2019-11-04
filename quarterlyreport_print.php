@@ -33,6 +33,7 @@
         ?>
         <link href="osscss/qtr_report.css" rel="stylesheet" type="text/css"/>
         <link rel="stylesheet" type="text/css" href="osscss/print.css" media="print">
+        <link href="osscss/themify-icons/themify-icons.css" rel="stylesheet" type="text/css"/>
         <style>
             @media print {
                 @page {size: portrait}
@@ -47,6 +48,7 @@
                 <main class="main">
                     <div class="container-fluid">
                         <img src="../henry-schein-7x4 cropped.jpg" style="width:333px;height:42px;">
+
                         <!--descriptive stats (what happened?)-->
                         <div class="row">
                             <?php include 'globaldata/qtr_report_descriptive.php'; ?>
@@ -54,9 +56,16 @@
                                 <div id="gauge_custtrend" style="min-width: 310px; max-width: 300px; height: 225px; margin: 0 auto"></div>
                             </div>
                         </div>
-                        <div class="" id="ctn_scorehistogram" style="width: 1000px; height: 600px;"></div>
+                        <div class="" id="ctn_scorehistogram" style="width: 930px; height: 600px;border: 1px solid #c8ced3;border-radius: 5px; margin-bottom: 20px"></div>
+                        <div class="" id="ctn_custcomplaints" >
+                            <?php include 'globaldata/qtrreport_custcomplaints.php'; ?>
+                        </div>
+
                         <!--diagnostic stats (why did it happen / what did our team do?)-->
-                        <div class="card pagebreak_before">
+                        <div class="pagebreak_before"></div>
+                           <img src="../henry-schein-7x4 cropped.jpg" style="width:333px;height:42px;margin-bottom: 20px;">
+                        <div class="card">
+                         
                             <div id="ctn_custauditcount">
                                 <div class="card-header h2">Large Customer Team Performance</div>
                                 <div class="col-sm-5" style="padding-top: 15px">
@@ -79,7 +88,10 @@
 
 
                         <!--predictive stats(what will happen next?)-->
-                        <div class="card pagebreak_before">
+                        <div class="pagebreak_before"></div>
+                         <img src="../henry-schein-7x4 cropped.jpg" style="width:333px;height:42px;margin-bottom: 20px;">
+                        <div class="card">
+                             
                             <div class="card-header h2">Top 10 Fill Rate Opportunities</div>
                             <?php include 'algorithms/qtr_report_topfr.php'; ?>
                             <div class="card-body">
@@ -322,7 +334,7 @@
                                     minTickInterval: 1,
                                     legend: {
                                         y: "10",
-                                        x: "5",
+                                        x: "5"
                                     }
 
                                 },
@@ -361,7 +373,6 @@
                                 }
                             });
                         }
-
 
                         $(document).ready(function () {
                             highchartoptions();
