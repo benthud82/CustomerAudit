@@ -340,7 +340,7 @@
                                             if (newVal < 0 || newVal > 200) {
                                                 newVal = point.y - inc;
                                             }
-                                            var newVal = <?php echo intval($totalscoretrend_m * 100) ?>;
+                                            var newVal = <?php echo number_format($totalscoretrend_m * 100,1) ?>;
                                             point.update(newVal);
 
                                         }, 3000);
