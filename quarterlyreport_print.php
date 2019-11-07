@@ -56,7 +56,7 @@
                                 <div id="gauge_custtrend" style="min-width: 310px; max-width: 300px; height: 225px; margin: 0 auto"></div>
                             </div>
                         </div>
-                        <div class="" id="ctn_scorehistogram" style="width: 930px; height: 540px;border: 1px solid #c8ced3;border-radius: 5px; margin-bottom: 20px"></div>
+                        <div class="" id="ctn_scorehistogram" style="width: 930px; height: 520px;border: 1px solid #c8ced3;border-radius: 5px; margin-bottom: 20px"></div>
                         <div class="" id="ctn_custcomplaints" >
                             <?php include 'globaldata/qtrreport_custcomplaints.php'; ?>
                         </div>
@@ -324,7 +324,7 @@
 
                     series: [{
                             name: 'Speed',
-                            data: [<?php echo intval($totalscoretrend_m * 100) ?>]
+                            data: [<?php echo number_format($totalscoretrend_m * 100,1) ?>]
                         }]
 
                 },
