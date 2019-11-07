@@ -47,13 +47,14 @@
             <div class="app-body">
                 <main class="main">
                     <div class="container-fluid">
-
-                        <?php include 'globaldata/qtrreport_pageheader.php'; ?>
+                        <div style="margin-top: 0px;">
+                            <?php include 'globaldata/qtrreport_pageheader.php'; ?>
+                        </div>
                         <!--descriptive stats (what happened?)-->
                         <div class="row">
                             <?php include 'globaldata/qtr_report_descriptive.php'; ?>
                             <div class="col-xs-6">
-                                <div id="gauge_custtrend" style="min-width: 310px; max-width: 300px; height: 225px; margin: 0 auto"></div>
+                                <div id="gauge_custtrend" style="min-width: 310px; max-width: 300px; height: 200px; margin: 0 auto"></div>
                             </div>
                         </div>
                         <div class="" id="ctn_scorehistogram" style="width: 930px; height: 520px;border: 1px solid #c8ced3;border-radius: 5px; margin-bottom: 20px"></div>
@@ -324,7 +325,7 @@
 
                     series: [{
                             name: 'Speed',
-                            data: [<?php echo number_format($totalscoretrend_m * 100,1) ?>]
+                            data: [<?php echo number_format($totalscoretrend_m * 100, 1) ?>]
                         }]
 
                 },
@@ -340,7 +341,7 @@
                                             if (newVal < 0 || newVal > 200) {
                                                 newVal = point.y - inc;
                                             }
-                                            var newVal = <?php echo number_format($totalscoretrend_m * 100,1) ?>;
+                                            var newVal = <?php echo number_format($totalscoretrend_m * 100, 1) ?>;
                                             point.update(newVal);
 
                                         }, 3000);
@@ -357,7 +358,7 @@
                                     renderTo: 'ctn_scorehistogram',
                                     type: 'column',
                                     zoomType: 'x',
-                                    height: 600
+                                    height: 550
                                 },
                                 credits: {
                                     enabled: false
