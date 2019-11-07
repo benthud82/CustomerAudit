@@ -47,8 +47,8 @@
             <div class="app-body">
                 <main class="main">
                     <div class="container-fluid">
-                        <img src="../henry-schein-7x4 cropped.jpg" style="width:333px;height:42px;">
 
+                        <?php include 'globaldata/qtrreport_pageheader.php'; ?>
                         <!--descriptive stats (what happened?)-->
                         <div class="row">
                             <?php include 'globaldata/qtr_report_descriptive.php'; ?>
@@ -56,16 +56,16 @@
                                 <div id="gauge_custtrend" style="min-width: 310px; max-width: 300px; height: 225px; margin: 0 auto"></div>
                             </div>
                         </div>
-                        <div class="" id="ctn_scorehistogram" style="width: 930px; height: 600px;border: 1px solid #c8ced3;border-radius: 5px; margin-bottom: 20px"></div>
+                        <div class="" id="ctn_scorehistogram" style="width: 930px; height: 540px;border: 1px solid #c8ced3;border-radius: 5px; margin-bottom: 20px"></div>
                         <div class="" id="ctn_custcomplaints" >
                             <?php include 'globaldata/qtrreport_custcomplaints.php'; ?>
                         </div>
 
                         <!--diagnostic stats (why did it happen / what did our team do?)-->
                         <div class="pagebreak_before"></div>
-                           <img src="../henry-schein-7x4 cropped.jpg" style="width:333px;height:42px;margin-bottom: 20px;">
+                        <?php include 'globaldata/qtrreport_pageheader.php'; ?>
                         <div class="card">
-                         
+
                             <div id="ctn_custauditcount">
                                 <div class="card-header h2">Large Customer Team Performance</div>
                                 <div class="col-sm-5" style="padding-top: 15px">
@@ -89,12 +89,70 @@
 
                         <!--predictive stats(what will happen next?)-->
                         <div class="pagebreak_before"></div>
-                         <img src="../henry-schein-7x4 cropped.jpg" style="width:333px;height:42px;margin-bottom: 20px;">
+                        <?php include 'globaldata/qtrreport_pageheader.php'; ?>
                         <div class="card">
-                             
+
                             <div class="card-header h2">Top 10 Fill Rate Opportunities</div>
                             <?php include 'algorithms/qtr_report_topfr.php'; ?>
+
                             <div class="card-body">
+                                <div class="row">
+                                    <!--Count of items still at risk-->
+                                    <div class="col-xs-4">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="stat-widget-four">
+                                                    <div class="stat-icon dib">
+                                                        <i class="ti-alert text-danger border-danger"></i>
+                                                    </div>
+                                                    <div class="stat-content">
+                                                        <div class="text-left dib">
+                                                            <div class="stat-heading"><strong><?php echo $atrisktotl ?> </strong>of 10</div>
+                                                            <div class="stat-text">Items At Risk</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--Potential fill rate hits per day until corrected-->
+                                    <div class="col-xs-4">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="stat-widget-four">
+                                                    <div class="stat-icon dib">
+                                                        <i class="ti-alert text-danger border-danger"></i>
+                                                    </div>
+                                                    <div class="stat-content">
+                                                        <div class="text-left dib">
+                                                            <div class="stat-heading"><strong><?php echo $totfrhits ?> </strong></div>
+                                                            <div class="stat-text">Est. Daily Fill Rate Hits</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--Total orders currently on BO-->
+                                    <div class="col-xs-4">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="stat-widget-four">
+                                                    <div class="stat-icon dib">
+                                                        <i class="ti-alert text-danger border-danger"></i>
+                                                    </div>
+                                                    <div class="stat-content">
+                                                        <div class="text-left dib">
+                                                            <div class="stat-heading"><strong><?php echo $totunitsonbo ?> </strong></div>
+                                                            <div class="stat-text">Total BOs</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <table class="table table-responsive-sm table-hover table-outline mb-0">
                                     <tbody>
                                         <?php foreach ($array_to_pfr as $key => $value) { ?>

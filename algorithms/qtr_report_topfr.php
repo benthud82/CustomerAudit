@@ -51,7 +51,7 @@ $sql_top_fr = $conn1->prepare("SELECT
                                 WHERE
                                     OR_DATE >= $rollqtrjdate AND item_flu IS NULL
                                         AND mfgbo_item IS NULL
-                                        and inv_boq > 10
+                                      --  and inv_boq > 10
                                 GROUP BY INV_PWHS , A.ITEM, ITEM_DESC
                                 ORDER BY CNT_DC DESC
                                 LIMIT 10");
@@ -59,9 +59,11 @@ $sql_top_fr->execute();
 $array_to_pfr = $sql_top_fr->fetchAll(pdo::FETCH_ASSOC);
 
 //loop through array to determine when next expected shipments are coming in
-
+$atrisktotl = 0;
+$totfrhits = 0;
+$totunitsonbo = 0;
 foreach ($array_to_pfr as $key => $value) {
-    $whse = $array_to_pfr[$key]['INV_PWHS'];    
+    $whse = $array_to_pfr[$key]['INV_PWHS'];
     $whse_string = _primdc($whse);
     $array_to_pfr[$key]['whse_string'] = $whse_string;
     $item = $array_to_pfr[$key]['ITEM'];
@@ -95,14 +97,14 @@ foreach ($array_to_pfr as $key => $value) {
         $array_to_pfr[$key]['DATE_LATEST'] = $array_openpo[0]['DATE_LATEST'];
         $array_to_pfr[$key]['OPENPURQTY'] = $array_openpo[0]['OPENPURQTY'];
     } else {
-        //apend no open po data to fill rate array
+//apend no open po data to fill rate array
         $array_to_pfr[$key]['PO_OPEN'] = 0;
         $array_to_pfr[$key]['DATE_EXPECTED'] = 'N/A';
         $array_to_pfr[$key]['PODATE'] = 'N/A';
         $array_to_pfr[$key]['DATE_LATEST'] = 'N/A';
         $array_to_pfr[$key]['OPENPURQTY'] = 0;
     }
-    //pull in variables for analysis
+//pull in variables for analysis
     $CNT_DC = $array_to_pfr[$key]['CNT_DC'];
     $inv_onorder = $array_to_pfr[$key]['inv_onorder'];
     $inv_onhand = $array_to_pfr[$key]['inv_onhand'];
@@ -113,14 +115,26 @@ foreach ($array_to_pfr as $key => $value) {
     $date_latest = $array_to_pfr[$key]['DATE_LATEST'];
     $PODATE = $array_to_pfr[$key]['PODATE'];
 
-    //is item still at risk?  Returns a number indicating at risk scenario
+//is item still at risk?  Returns a number indicating at risk scenario
     $atrisk_scenario = _atrisk($inv_onhand, $inv_boq);
     $atrisk_desc = _atrisk_desc($atrisk_scenario, $AVG_DAILY_PICKS, $date_expected, $date_latest, $today, $PODATE);
 
-    //push atrisk array to $array_to_pfr
+//push atrisk array to $array_to_pfr
     $array_to_pfr[$key]['atrisk'] = $atrisk_desc[0];
+
+//how many of 10 are still at risk.  $array_to_pfr[$key]['atrisk'] > 0 means at risk
+    if ($atrisk_scenario == 1 || $atrisk_scenario == 2) {
+        $atrisktotl += 1;
+    }
+    
+    $totunitsonbo += $inv_boq;
+
+
     $array_to_pfr[$key]['atrisk_desc'] = $atrisk_desc[1];
     $array_to_pfr[$key]['frhits_expected'] = ceil($atrisk_desc[2]);
+
+    $totfrhits += ceil($atrisk_desc[2]);
+
     $array_to_pfr[$key]['frhits_max'] = ceil($atrisk_desc[3]) + 1;
     $array_to_pfr[$key]['color_prgbar'] = $atrisk_desc[4];
     $array_to_pfr[$key]['perc_remain'] = $atrisk_desc[5];
@@ -128,4 +142,5 @@ foreach ($array_to_pfr as $key => $value) {
     $array_to_pfr[$key]['table_class'] = $atrisk_desc[7];
     $array_to_pfr[$key]['atrisk_desc2'] = $atrisk_desc[8];
 }
+
 
