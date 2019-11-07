@@ -246,7 +246,7 @@ function _atrisk($inv_onhand, $inv_boq) {
 
     //opt99: Item is not at risk going forward
     if ($inv_boq == 0 && $inv_onhand > 0) {
-        $opt_atrisk = 99;
+        $opt_atrisk = 0;
         return $opt_atrisk;
     }
 
@@ -274,8 +274,6 @@ function _atrisk_desc($atrisk_scenario, $AVG_DAILY_PICKS, $date_expected, $date_
                 $desc = 'Item is currently taking additional customer backorders.';
                 $desc2 = '<strong>' . $hits_exp . '</strong> expected fill rate hits per day till received.';
             }
-
-
 
             $hits_max = $resolutiondays_latest * $AVG_DAILY_PICKS;
             $backgroundcolor = '#fce3e7';
