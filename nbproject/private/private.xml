@@ -3,8 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Bitnami/wampstack/apache2/htdocs/CustomerAudit/algorithms/qtr_report_topfr.php</file>
             <file>file:/C:/Bitnami/wampstack/apache2/htdocs/CustomerAudit/quarterlyreport_print.php</file>
+            <file>file:/C:/Bitnami/wampstack/apache2/htdocs/CustomerAudit/functions/customer_audit_functions.php</file>
+            <file>file:/C:/Bitnami/wampstack/apache2/htdocs/CustomerAudit/osscss/qtr_report.css</file>
+            <file>file:/C:/Bitnami/wampstack/apache2/htdocs/CustomerAudit/osscss/offsys_dash.css</file>
+            <file>file:/C:/Bitnami/wampstack/apache2/htdocs/CustomerAudit/osscss/print.css</file>
             <file>file:/C:/Bitnami/wampstack/apache2/htdocs/CustomerAudit/globaldata/qtrreport_pageheader.php</file>
+            <file>file:/C:/Bitnami/wampstack/apache2/htdocs/CustomerAudit/globaldata/qtrreport_custcomplaints.php</file>
+            <file>file:/C:/Bitnami/wampstack/apache2/htdocs/CustomerAudit/globaldata/top3salesplans.php</file>
+            <file>file:/C:/Bitnami/wampstack/apache2/htdocs/CustomerAudit/globaldata/qtr_report_descriptive.php</file>
         </group>
     </open-files>
 </project-private>

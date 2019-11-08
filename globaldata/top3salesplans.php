@@ -196,8 +196,8 @@ foreach ($top3_array as $key => $value) {
 
 
         <div class="brand-card">
-            <div class="brand-card-header bg-<?php echo $headerclass ?>">
-                <div class="h4" style="color: white;"><?php echo $salesplan . ' | ' . $salesplan_desc ?></div>
+            <div class="card-header bg-<?php echo $headerclass ?>">
+                <div class="h4" style="color: white; text-align: center;"><?php echo $salesplan . ' | ' . $salesplan_desc ?></div>
 
             </div>
             <div class="brand-card-body">
