@@ -261,7 +261,7 @@ function _atrisk_desc($atrisk_scenario, $AVG_DAILY_PICKS, $date_expected, $date_
         case 1: //still on BO with 0 onhand
             //POStatus
             if ($today >= $date_latest) {
-                                $resolutiondays_latest = getWorkingDays($today, $date_latest, $holidays);
+                $resolutiondays_latest = getWorkingDays($today, $date_latest, $holidays);
                 $atrisk = 'At Risk | PO is late or delayed';
                 $hits_exp = $AVG_DAILY_PICKS;
                 $desc = 'Item is currently taking additional customer backorders.';
@@ -338,7 +338,7 @@ function _atrisk_desc($atrisk_scenario, $AVG_DAILY_PICKS, $date_expected, $date_
 
         $should_days = intval($date_PO_conv->diff($date_latest_conv)->format('%r%a'));
         $daysremain = intval($today_conv->diff($date_latest_conv)->format('%r%a'));
-        $perc_remain = intval(($daysremain / $should_days) * 100);
+        $perc_remain = intval(1-($daysremain / $should_days) * 100);
         if ($perc_remain < 0) {
             $perc_remain = 100;
         }
