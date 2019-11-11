@@ -76,7 +76,7 @@
                                 <?php include 'globaldata/cust_audit_count.php'; ?>
                             </div>
                             <div id="ctn_top3salesplans" class=" ">
-                                <div class="col-sm-5" style="padding-top: 15px">
+                                <div class="col-sm-5" style="padding-top: 35px">
                                     <h4 class="card-title mb-0">High Impact Salesplan Performance</h4>
                                 </div>
                                 <div class="row"style="margin: 15px">
