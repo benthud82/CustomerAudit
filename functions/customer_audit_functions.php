@@ -338,7 +338,7 @@ function _atrisk_desc($atrisk_scenario, $AVG_DAILY_PICKS, $date_expected, $date_
 
         $should_days = intval($date_PO_conv->diff($date_latest_conv)->format('%r%a'));
         $daysremain = intval($today_conv->diff($date_latest_conv)->format('%r%a'));
-        $perc_remain = intval(1-($daysremain / $should_days) * 100);
+        $perc_remain = intval((1 - ($daysremain / $should_days) ) * 100);
         if ($daysremain < 0) {
             $perc_remain = 100;
         }
