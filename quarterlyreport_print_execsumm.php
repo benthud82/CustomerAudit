@@ -50,7 +50,7 @@
                         <div style="margin-top: 0px;">
                             <?php include 'globaldata/qtrreport_execsumm_pageheader.php'; ?>
                         </div>
-                        <div class="h5">Large Customer Review</div>
+                        <div class="h4">Large Customer Review</div>
                         <!--include blob from Ed/Mel?-->
                         <p>THIS is a test blob.  There would be a lot more writing here. THIS is a test blob.  There would be a lot more writing here.
                             THIS is a test blob.  There would be a lot more writing here.THIS is a test blob.  There would be a lot more writing here.
@@ -64,7 +64,7 @@
 
                         <!--descriptive stats (what happened?)-->
                         <?php include 'globaldata/qtr_report_descriptive.php'; ?>
-                        <div class="h5" style="margin-top: 20px;">Large Customer Score Summary</div>
+                        <div class="h4" style="margin-top: 20px;">Large Customer Score Summary</div>
 
                         <div>Total customers (salesplans) tracked by large customer team:<strong> <?php echo $custcount_array[0]['CUST_COUNT']; ?></strong></div>
                         <div> <?php echo 'Average quarterly score: <strong>' . intval($custcount_array[0]['AVG_SCORE'] * 100) . '</strong>'; ?> </div>
@@ -84,9 +84,9 @@
                         $tot_this = number_format($currsum, 0, ".", ",");
                         $tot_incdec = ($tot_last > $tot_this ? 'decreased' : 'increased');
                         ?>
-                        <div class="h5" style="margin-top: 20px;">Customer Complaints</div>
+                        <div class="h4" style="margin-top: 20px;">Customer Complaints</div>
 
-                        <div><strong>Total</strong> customer complaints have <?php echo $tot_incdec; ?> over the past quarter to <strong><?php echo $tot_this ?></strong> this quarter from <strong> <?php echo $tot_last ?></strong> last quarter.</div>
+                        <div><strong>Total</strong> customer complaints have <strong><?php echo $tot_incdec; ?></strong> over the past quarter to <strong><?php echo $tot_this ?></strong> this quarter from <strong> <?php echo $tot_last ?></strong> last quarter.</div>
                         <?php
                         foreach ($array_custcomp as $key => $value) {
                             $metric = $array_custcomp[$key]['METRIC'];
@@ -99,13 +99,13 @@
                         ?>
 
                         <!--diagnostic stats (why did it happen / what did our team do?)-->
-                        <div class="h5" style="margin-top: 20px;">Large Customer Team - Actions Taken</div>
+                        <div class="h4" style="margin-top: 20px;">Large Customer Team - Actions Taken</div>
                         <?php include 'globaldata/cust_audit_count.php'; ?>
                         <div>The Large Customer Team audited a total of <strong><?php echo $tot_audits ?></strong> customer entities for the previous quarter. </div>
                         <p>The following have been identified as high impact salesplans. </p>
                         <?php include 'globaldata/top3salesplans_execsumm.php'; ?>
 
-                        <div class="h5" style="margin-top: 20px;">Fill Rate Summary - Top 10 Items</div>
+                        <div class="h4" style="margin-top: 20px;">Fill Rate Summary - Top 10 Items</div>
                         <?php include 'algorithms/qtr_report_topfr.php'; ?>
                         <p>
                             Of the top 10 items causing fill rate hits during the last quarter, <strong><?php echo $atrisktotl ?></strong> items will continue to be issues going forward next quarter.
