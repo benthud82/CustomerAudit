@@ -53,6 +53,20 @@
                         <!--descriptive stats (what happened?)-->
                         <div class="row">
                             <?php include 'globaldata/qtr_report_descriptive.php'; ?>
+                            <div class="col-xs-6" style="padding-top: 30px">
+                                <div class="row">
+                                    <h4> <?php echo 'Total number of customers tracked: ' . $custcount_array[0]['CUST_COUNT']; ?> </h4>
+                                </div>
+                                <div class="row">
+                                    <h4>  <?php echo 'Average quarterly score: ' . intval($custcount_array[0]['AVG_SCORE'] * 100); ?> </h4>
+                                </div>
+                                <div class="row">
+                                    <h4>  <?php
+                                        $plusminus = ($totalscoretrend_m >= 0 ? '+' : '-');
+                                        echo 'Quarter over Quarter average score trend: ' . $plusminus . number_format($totalscoretrend_m * 100, 1);
+                                        ?> </h4>
+                                </div>
+                            </div>
                             <div class="col-xs-6">
                                 <div id="gauge_custtrend" style="min-width: 310px; max-width: 300px; height: 200px; margin: 0 auto"></div>
                             </div>
@@ -60,6 +74,67 @@
                         <div class="" id="ctn_scorehistogram" style="width: 930px; height: 520px;border: 1px solid #c8ced3;border-radius: 5px; margin-bottom: 20px"></div>
                         <div class="" id="ctn_custcomplaints" >
                             <?php include 'globaldata/qtrreport_custcomplaints.php'; ?>
+
+                            <div class="row">
+                                <!--Total customer complaints populated outside of array loop since using sum-->
+                                <div class="col-xs-6">
+                                    <div class="card">
+                                        <div class="card-header h4 <?php echo $headerclass ?>">TOTAL COMPLAINTS</div>
+                                        <div class="card-body">
+                                            <div class="stat-widget-four">
+                                                <div class="stat-icon dib">
+                                                    <i class="<?php echo $ticlass ?>"></i>
+                                                </div>
+                                                <div class="stat-content">
+                                                    <div class="text-left dib">
+                                                        <div class="stat-heading">This Quarter: <strong><?php echo number_format($currsum, 0, ".", ",") ?></strong></div>
+                                                        <div class="stat-text">Last Quarter: <?php echo number_format($prevsum, 0, ".", ",") ?></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--Start array loop for remaining customer complaint metrics-->
+                                <?php
+                                foreach ($array_custcomp as $key => $value) {
+                                    $metric = $array_custcomp[$key]['METRIC'];
+                                    $prevsum = $array_custcomp[$key]['PREVQTR'];
+                                    $currsum = $array_custcomp[$key]['CURQTR'];
+
+                                    if ($prevsum <= $currsum) {
+                                        $headerclass = 'bg-danger';
+                                        $ticlass = 'ti-stats-up text-danger border-danger';
+                                    } else {
+                                        $headerclass = 'bg-success';
+                                        $ticlass = 'ti-stats-down text-success border-success';
+                                    }
+                                    ?>
+                                    <div class="col-xs-6">
+                                        <div class="card">
+                                            <div class="card-header h4 <?php echo $headerclass ?>"><?php echo strtoupper($metric) ?></div>
+                                            <div class="card-body">
+                                                <div class="stat-widget-four">
+                                                    <div class="stat-icon dib">
+                                                        <i class="<?php echo $ticlass ?>"></i>
+                                                    </div>
+                                                    <div class="stat-content">
+                                                        <div class="text-left dib">
+                                                            <div class="stat-heading">This Quarter: <strong><?php echo number_format($currsum, 0, ".", ",") ?></strong></div>
+                                                            <div class="stat-text">Last Quarter: <?php echo number_format($prevsum, 0, ".", ",") ?></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                <?php } ?>
+
+                            </div>
+
                         </div>
 
                         <!--diagnostic stats (why did it happen / what did our team do?)-->
@@ -74,6 +149,33 @@
                                     <div class="small text-muted"><?php echo $startdate . ' thru ' . $curdate ?></div>
                                 </div>
                                 <?php include 'globaldata/cust_audit_count.php'; ?>
+                                <div class="col-sm-12">
+                                    <div class="row">
+                                        <?php foreach ($array_custauditcount as $key => $value) { ?>
+                                            <div class="col-xs-3">
+                                                <div class="callout callout-success">
+                                                    <small class="text-muted"><?php echo $array_custauditcount[$key]['auditcomplete_custtype'] ?></small>
+                                                    <br>
+                                                    <strong class="h4"><?php echo number_format($array_custauditcount[$key]['AUDIT_COUNT'], 0, '.', ',') ?></strong>
+                                                    <div class="chart-wrapper">
+                                                        <canvas id="sparkline-chart-1" width="100" height="30"></canvas>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php } ?>
+                                        <div class="col-xs-3">
+                                            <div class="callout callout-info">
+                                                <small class="text-muted">ITEMS</small>
+                                                <br>
+                                                <strong class="h4"><?php echo number_format($array_itemauditcount[0]['ITEM_COUNT'], 0, '.', ',') ?></strong>
+                                                <div class="chart-wrapper">
+                                                    <canvas id="sparkline-chart-1" width="100" height="30"></canvas>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
                             </div>
                             <div id="ctn_top3salesplans" class=" ">
                                 <div class="col-sm-5" style="padding-top: 35px">

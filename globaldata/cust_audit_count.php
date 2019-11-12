@@ -1,4 +1,5 @@
 <?php
+
 include_once 'connection/connection_details.php';
 //include_once '../globalfunctions/custdbfunctions.php';
 //top 3 salesplans score history increase/decrease
@@ -21,33 +22,50 @@ $sql_itemauditcount = $conn1->prepare("SELECT
                                                 AND customeraction_asgntasks_STATUS = 'COMPLETE'");
 $sql_itemauditcount->execute();
 $array_itemauditcount = $sql_itemauditcount->fetchAll(pdo::FETCH_ASSOC);
-?>
+
+//mass alorithm recommendations
+$sql_damage = $conn1->prepare("SELECT 
+                                COUNT(*) AS DAMAGE
+                            FROM
+                                custaudit.massalgorithm_damage_recs;");
+$sql_damage->execute();
+$array_damage = $sql_damage->fetchAll(pdo::FETCH_ASSOC);
+
+$sql_shipacc = $conn1->prepare("SELECT 
+                                COUNT(*) AS SHIPACC
+                            FROM
+                                custaudit.massalgorithm_shipacc_recs;");
+$sql_shipacc->execute();
+$array_shipacc = $sql_shipacc->fetchAll(pdo::FETCH_ASSOC);
+
+$sql_skuopt = $conn1->prepare("SELECT 
+                                COUNT(*) AS SKUOPT
+                            FROM
+                                custaudit.massalgorithm_skuopt_recs;");
+$sql_skuopt->execute();
+$array_skuopt = $sql_skuopt->fetchAll(pdo::FETCH_ASSOC);
+
+$sql_ma_actions = $conn1->prepare("SELECT 
+                                COUNT(*) as ACTIONS
+                            FROM
+                                custaudit.massalgorithm_actions
+                            WHERE
+                                ma_date >= DATE_ADD(CURDATE(), INTERVAL - 90 DAY)");
+$sql_ma_actions->execute();
+$array_ma_actions = $sql_ma_actions->fetchAll(pdo::FETCH_ASSOC);
+
+//assign variables
+$count_damage = $array_damage[0]['DAMAGE'];
+$count_skuopt = $array_skuopt[0]['SKUOPT'];
+$count_shipacc = $array_shipacc[0]['SHIPACC'];
+$count_totaction = $array_ma_actions[0]['ACTIONS'];
+
+$tot_audits = 0;
+foreach ($array_custauditcount as $key => $value) {
+    $tot_audits += $array_custauditcount[$key]['AUDIT_COUNT'];
+}
 
 
-<div class="col-sm-12">
-    <div class="row">
-        <?php foreach ($array_custauditcount as $key => $value) { ?>
-            <div class="col-xs-3">
-                <div class="callout callout-success">
-                    <small class="text-muted"><?php echo $array_custauditcount[$key]['auditcomplete_custtype'] ?></small>
-                    <br>
-                    <strong class="h4"><?php echo number_format($array_custauditcount[$key]['AUDIT_COUNT'], 0, '.', ',') ?></strong>
-                    <div class="chart-wrapper">
-                        <canvas id="sparkline-chart-1" width="100" height="30"></canvas>
-                    </div>
-                </div>
-            </div>
-        <?php } ?>
-        <div class="col-xs-3">
-            <div class="callout callout-info">
-                <small class="text-muted">ITEMS</small>
-                <br>
-                <strong class="h4"><?php echo number_format($array_itemauditcount[0]['ITEM_COUNT'], 0, '.', ',') ?></strong>
-                <div class="chart-wrapper">
-                    <canvas id="sparkline-chart-1" width="100" height="30"></canvas>
-                </div>
-            </div>
-        </div>
 
-    </div>
-</div>
+
+

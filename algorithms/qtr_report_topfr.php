@@ -126,7 +126,7 @@ foreach ($array_to_pfr as $key => $value) {
     if ($atrisk_scenario == 1 || $atrisk_scenario == 2) {
         $atrisktotl += 1;
     }
-    
+
     $totunitsonbo += $inv_boq;
 
 
