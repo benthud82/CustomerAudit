@@ -272,7 +272,7 @@
                                                     <div class="small">Units Available: <?php echo $array_to_pfr[$key]['inv_onhand']; ?> </div>
                                                     <div class="small">Units on Order: <?php echo $array_to_pfr[$key]['inv_onorder']; ?></div>
                                                 </td>
-                                                <?php if ($array_to_pfr[$key]['atrisk'] == 'At Risk' || $array_to_pfr[$key]['atrisk'] = 'At Risk | PO is late or delayed') { ?>
+                                                <?php if ($array_to_pfr[$key]['atrisk'] == 'At Risk' || $array_to_pfr[$key]['atrisk'] == 'At Risk | PO is late or delayed') { ?>
                                                     <td class="spaceUnder">
                                                         <div class="clearfix">
                                                             <div class="float-left">
