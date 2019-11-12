@@ -272,19 +272,29 @@
                                                     <div class="small">Units Available: <?php echo $array_to_pfr[$key]['inv_onhand']; ?> </div>
                                                     <div class="small">Units on Order: <?php echo $array_to_pfr[$key]['inv_onorder']; ?></div>
                                                 </td>
-                                                <td class="spaceUnder">
-                                                    <div class="clearfix">
-                                                        <div class="float-left">
-                                                            <strong><?php echo $array_to_pfr[$key]['perc_remain'] ?>%</strong>
+                                                <?php if ($array_to_pfr[$key]['atrisk'] == 'At Risk' || $array_to_pfr[$key]['atrisk'] = 'At Risk | PO is late or delayed') { ?>
+                                                    <td class="spaceUnder">
+                                                        <div class="clearfix">
+                                                            <div class="float-left">
+                                                                <strong><?php echo $array_to_pfr[$key]['perc_remain'] ?>%</strong>
+                                                            </div>
+                                                            <div class="float-right">
+                                                                <small class="text-muted"><?php echo ($array_to_pfr[$key]['DATE_EXPECTED'] == 'N/A' ? 'N/A' : date('M j, Y', strtotime($array_to_pfr[$key]['DATE_EXPECTED']))) . ' - ' . ($array_to_pfr[$key]['DATE_LATEST'] == 'N/A' ? 'N/A' : date('M j, Y', strtotime($array_to_pfr[$key]['DATE_LATEST']))); ?></small>
+                                                            </div>
                                                         </div>
-                                                        <div class="float-right">
-                                                            <small class="text-muted"><?php echo ($array_to_pfr[$key]['DATE_EXPECTED'] == 'N/A' ? 'N/A' : date('M j, Y', strtotime($array_to_pfr[$key]['DATE_EXPECTED']))) . ' - ' . ($array_to_pfr[$key]['DATE_LATEST'] == 'N/A' ? 'N/A' : date('M j, Y', strtotime($array_to_pfr[$key]['DATE_LATEST']))); ?></small>
+                                                        <div class="progress progress-xs">
+                                                            <div class="progress-bar <?php echo $array_to_pfr[$key]['color_prgbar'] ?>" role="progressbar" style="width: <?php echo $array_to_pfr[$key]['perc_remain'] ?>%" aria-valuenow="<?php echo $array_to_pfr[$key]['perc_remain'] ?>" aria-valuemin="0" aria-valuemax="100"></div>
                                                         </div>
-                                                    </div>
-                                                    <div class="progress progress-xs">
-                                                        <div class="progress-bar <?php echo $array_to_pfr[$key]['color_prgbar'] ?>" role="progressbar" style="width: <?php echo $array_to_pfr[$key]['perc_remain'] ?>%" aria-valuenow="<?php echo $array_to_pfr[$key]['perc_remain'] ?>" aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
-                                                </td>
+                                                    </td>
+                                                <?php } else { ?>
+                                                    <td class="spaceUnder">
+                                                        <div class="clearfix">
+                                                            <div class="float-left">
+                                                             Not at Risk | PO Data N/A
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                <?php } ?>
                                                 <td class="spaceUnder">
                                                     <div><strong><?php echo $array_to_pfr[$key]['atrisk']; ?></strong></div>
                                                     <div class="small"><?php echo $array_to_pfr[$key]['atrisk_desc']; ?></div>
