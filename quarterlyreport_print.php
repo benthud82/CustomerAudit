@@ -63,7 +63,7 @@
                                 <div class="row">
                                     <h4>  <?php
                                         $plusminus = ($totalscoretrend_m >= 0 ? '+' : '-');
-                                        echo 'Quarter over Quarter average score trend: ' . $plusminus . number_format($totalscoretrend_m * 100, 1);
+                                        echo 'Quarter over quarter average score trend: ' . $plusminus . number_format($totalscoretrend_m * 100, 1);
                                         ?> </h4>
                                 </div>
                             </div>
