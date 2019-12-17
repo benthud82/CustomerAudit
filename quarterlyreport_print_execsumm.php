@@ -111,6 +111,9 @@
                             Of the top 10 items causing fill rate hits during the last quarter, <strong><?php echo $atrisktotl ?></strong> items will continue to be issues going forward next quarter.
                             These items will cause an additional <strong><?php echo $totfrhits ?></strong> fill rate issues per day until resoloved.  These items currently represent <strong><?php echo $totunitsonbo ?></strong> customer orders on back order.
                         </p>
+                        <p>
+                            Based off historical 
+                        </p>
 
 
                     </div>
