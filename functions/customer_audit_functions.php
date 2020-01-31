@@ -191,6 +191,18 @@ function _gregdateto1yyddd($convertdate) {
     return $datej;
 }
 
+function _gregdatetoyyddd($convertdate) {
+    $startyear = date('y', strtotime($convertdate));
+    $startday = date('z', strtotime($convertdate)) + 1;
+    if ($startday < 10) {
+        $startday = '00' . $startday;
+    } else if ($startday < 100) {
+        $startday = '0' . $startday;
+    }
+    $datej = intval($startyear . $startday);
+    return $datej;
+}
+
 function _rolling12startfiscal() {
     $current_month = date('m');
     $prev_year = date("Y", strtotime("-1 year"));
