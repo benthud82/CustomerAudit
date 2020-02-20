@@ -69,7 +69,7 @@
                         <div>Total customers (salesplans) tracked by large customer team:<strong> <?php echo $custcount_array[0]['CUST_COUNT']; ?></strong></div>
                         <div> <?php echo 'Average quarterly score: <strong>' . intval($custcount_array[0]['AVG_SCORE'] * 100) . '</strong>'; ?> </div>
                         <div> <?php
-                            $plusminus = ($totalscoretrend_m >= 0 ? '+' : '-');
+                            $plusminus = ($totalscoretrend_m >= 0 ? '+' : '');
                             echo 'Quarter over quarter average score trend: <strong>' . $plusminus . number_format($totalscoretrend_m * 100, 1) . '</strong>';
                             ?>
                         </div>
@@ -111,9 +111,7 @@
                             Of the top 10 items causing fill rate hits during the last quarter, <strong><?php echo $atrisktotl ?></strong> items will continue to be issues going forward next quarter.
                             These items will cause an additional <strong><?php echo $totfrhits ?></strong> fill rate issues per day until resoloved.  These items currently represent <strong><?php echo $totunitsonbo ?></strong> customer orders on back order.
                         </p>
-                        <p>
-                            Based off historical 
-                        </p>
+                
 
 
                     </div>
