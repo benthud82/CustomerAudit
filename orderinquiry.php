@@ -41,7 +41,22 @@
                     </div>
                 </div>
 
-                <div id="maincontent" class="hidewrapper hidden" ></div>
+                <div id="maincontent" class="hidewrapper hidden" >
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div id="orderentry"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div id="penddata"></div>
+                        </div>
+                    </div>
+
+
+
+                </div>
 
             </section>
         </section>
@@ -55,12 +70,11 @@
             $("#modules").addClass('active'); //add active strip to audit on vertical nav
 
 
-            function getjde() {
+            function getjde() {            
                 var num_type = $('#orderytype').val();
                 var num_invoice = $('#invoicenum').val();
                 if (num_type === 'WCS') {
                     $.ajax({
-                        async: false,
                         url: 'globaldata/getjde.php', //url for the ajax.  Variable numtype is either salesplan, billto, shipto
                         data: {num_invoice: num_invoice}, //pass salesplan, billto, shipto all through billto
                         type: 'POST',
@@ -72,29 +86,39 @@
                 } else {
                     getorderdata(num_invoice);
                 }
-
-
             }
 
 
 
             function getorderdata(jdeinvoice) {
-                debugger;
+                $('#maincontent').addClass('hidden');
                 data_pend(jdeinvoice);
+                data_orderentry(jdeinvoice);
 
 
-
+                $('#maincontent').removeClass('hidden');
             }
 
             function data_pend(jdeinvoice) {
-                debugger;
                 $.ajax({
-                    url: 'globaldata/search_billto.php', //url for the ajax.  Variable numtype is either salesplan, billto, shipto
-                    data: {jde_num: jde_num}, //pass salesplan, billto, shipto all through billto
+                    url: 'globaldata/data_pend.php', //url for the ajax.  Variable numtype is either salesplan, billto, shipto
+                    data: {jde_num: jdeinvoice}, //pass salesplan, billto, shipto all through billto
                     type: 'POST',
                     dataType: 'html',
                     success: function (ajaxresult) {
-                        $("#resultcontainer_salesplan").html(ajaxresult);
+                        $("#penddata").html(ajaxresult);
+                    }
+                });
+            }
+
+            function data_orderentry(jdeinvoice) {
+                $.ajax({
+                    url: 'globaldata/data_orderentry.php', //url for the ajax.  Variable numtype is either salesplan, billto, shipto
+                    data: {jde_num: jdeinvoice}, //pass salesplan, billto, shipto all through billto
+                    type: 'POST',
+                    dataType: 'html',
+                    success: function (ajaxresult) {
+                        $("#orderentry").html(ajaxresult);
                     }
                 });
             }
