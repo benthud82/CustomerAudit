@@ -1,7 +1,9 @@
+
 <!DOCTYPE html>
 <html>
     <?php
     include 'sessioninclude.php';
+    
     ?>
     <head>
         <title>Order Inquiry</title>
@@ -43,6 +45,11 @@
 
                 <div id="maincontent" class="hidewrapper hidden" >
 
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div id="customer"></div>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-lg-6">
                             <div id="orderentry"></div>
@@ -94,6 +101,7 @@
                 $('#maincontent').addClass('hidden');
                 data_pend(jdeinvoice);
                 data_orderentry(jdeinvoice);
+                data_customer(jdeinvoice);
 
 
                 $('#maincontent').removeClass('hidden');
@@ -119,6 +127,18 @@
                     dataType: 'html',
                     success: function (ajaxresult) {
                         $("#orderentry").html(ajaxresult);
+                    }
+                });
+            }
+
+            function data_customer(jdeinvoice) {
+                $.ajax({
+                    url: 'globaldata/data_customer.php', //url for the ajax.  Variable numtype is either salesplan, billto, shipto
+                    data: {jde_num: jdeinvoice}, //pass salesplan, billto, shipto all through billto
+                    type: 'POST',
+                    dataType: 'html',
+                    success: function (ajaxresult) {
+                        $("#customer").html(ajaxresult);
                     }
                 });
             }
