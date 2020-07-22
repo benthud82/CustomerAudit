@@ -990,7 +990,14 @@ li.alternate:nth-child(odd) { background: #f1f1f1; }
 .progress-xs{height:4px}.progress-sm{height:8px}.progress-white{background-color:rgba(255,255,255,.2)}.progress-white .progress-bar{background-color:#fff}.progress-group{display:-ms-flexbox;display:flex;-ms-flex-flow:row wrap;flex-flow:row wrap;margin-bottom:1rem}.progress-group-prepend{-ms-flex:0 0 100px;flex:0 0 100px;-ms-flex-item-align:center;align-self:center}.progress-group-icon{margin:0 1rem 0 .25rem;font-size:1.09375rem}.progress-group-text{font-size:.765625rem;color:#73818f}.progress-group-header{display:-ms-flexbox;display:flex;-ms-flex-preferred-size:100%;flex-basis:100%;-ms-flex-align:end;align-items:flex-end;margin-bottom:.25rem}.progress-group-bars{-ms-flex-positive:1;flex-grow:1;-ms-flex-item-align:center;align-self:center}.progress-group-bars .progress:not(:last-child){margin-bottom:2px}.progress-group-header+.progress-group-bars{-ms-flex-preferred-size:100%;flex-basis:100%}
 
 
-  .table-red{
-        background-color:#fce3e7 !important;
-        -webkit-print-color-adjust: exact !important;
-    }
+.table-red{
+    background-color:#fce3e7 !important;
+    -webkit-print-color-adjust: exact !important;
+}
+
+
+.sticky-top thead th {
+    position: sticky;
+    top: 51px;
+    background-color: #ffffff;
+}

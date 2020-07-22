@@ -5,7 +5,7 @@
         <group>
             <file>file:/C:/Bitnami/wampstack-7.3.16-0/apache2/htdocs/CustomerAudit/globaldata/data_pend.php</file>
             <file>file:/C:/Bitnami/wampstack-7.3.16-0/apache2/htdocs/CustomerAudit/globaldata/getjde.php</file>
-            <file>file:/C:/Bitnami/wampstack-7.3.16-0/apache2/htdocs/CustomerAudit/globaldata/data_orderentry.php</file>
+            <file>file:/C:/Bitnami/wampstack-7.3.16-0/apache2/htdocs/CustomerAudit/globaldata/data_customer.php</file>
             <file>file:/C:/Bitnami/wampstack-7.3.16-0/apache2/htdocs/CustomerAudit/orderinquiry.php</file>
         </group>
     </open-files>

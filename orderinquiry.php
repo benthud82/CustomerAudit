@@ -3,10 +3,10 @@
 <html>
     <?php
     include 'sessioninclude.php';
-    
     ?>
     <head>
         <title>Order Inquiry</title>
+        <script src="../global_dash/assets/js/bootstrap.min.js" type="text/javascript"></script>
         <?php include_once 'headerincludes.php'; ?>
     </head>
 
@@ -49,17 +49,23 @@
                         <div class="col-lg-6">
                             <div id="customer"></div>
                         </div>
+                        <div class="col-lg-6">
+                            <div id="penddata"></div>
+                        </div>
+
                     </div>
                     <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <div id="orderentry"></div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-6">
-                            <div id="penddata"></div>
+                        <div class="col-lg-12">
+                            <div id="wcs_invoice"></div>
                         </div>
+                             
                     </div>
+
 
 
 
@@ -77,7 +83,7 @@
             $("#modules").addClass('active'); //add active strip to audit on vertical nav
 
 
-            function getjde() {            
+            function getjde() {
                 var num_type = $('#orderytype').val();
                 var num_invoice = $('#invoicenum').val();
                 if (num_type === 'WCS') {
@@ -102,6 +108,8 @@
                 data_pend(jdeinvoice);
                 data_orderentry(jdeinvoice);
                 data_customer(jdeinvoice);
+                data_wcsinvoice(jdeinvoice);
+
 
 
                 $('#maincontent').removeClass('hidden');
@@ -139,6 +147,17 @@
                     dataType: 'html',
                     success: function (ajaxresult) {
                         $("#customer").html(ajaxresult);
+                    }
+                });
+            }
+            function data_wcsinvoice(jdeinvoice) {
+                $.ajax({
+                    url: 'globaldata/data_wcsinvoice.php', //url for the ajax.  Variable numtype is either salesplan, billto, shipto
+                    data: {jde_num: jdeinvoice}, //pass salesplan, billto, shipto all through billto
+                    type: 'POST',
+                    dataType: 'html',
+                    success: function (ajaxresult) {
+                        $("#wcs_invoice").html(ajaxresult);
                     }
                 });
             }
