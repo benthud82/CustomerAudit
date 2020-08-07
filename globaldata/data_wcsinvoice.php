@@ -8,14 +8,8 @@ $sql_wcsinv = $aseriesconn->prepare("SELECT DISTINCT PBWCS# as WCSNUM, PBWKNO FR
 $sql_wcsinv->execute();
 $array_wcsinv = $sql_wcsinv->fetchAll(pdo::FETCH_ASSOC);
 
-
-//$sql_wcsboxlines = $aseriesconn->prepare("");
-//$sql_wcsboxlines->execute();
-//$array_wcsboxlines = $sql_wcsboxlines->fetchAll(pdo::FETCH_ASSOC);
 ?>
-<section class="panel">
-    <header class="panel-heading title bg-info " style="font-size: 20px"> WCS Invoice(s) </header> 
-    <div class="panel-body">
+
         <?php
         foreach ($array_wcsinv as $keyinv => $value) {
             $wcsnum = $array_wcsinv[$keyinv]['WCSNUM'];
@@ -28,7 +22,8 @@ $array_wcsinv = $sql_wcsinv->fetchAll(pdo::FETCH_ASSOC);
             $boxcount = sizeof($array_wcsboxnum);
             ?>
             <section class="panel">
-                <header class="panel-heading title bg-primary boldtext" style="font-size: 15px">WCS#:<?php echo ' ' . $wcsnum . '-' . $womnum; ?>  </header> 
+                <header class="panel-heading bg bg-inverse h5">WCS#:<?php echo ' ' . $wcsnum . '-' . $womnum; ?>  <i class="fa fa-close pull-right closehidden" style="cursor: pointer;" id="close_scoreavg"></i><i class="fa fa-chevron-down pull-right clicktotoggle-chevron" style="cursor: pointer;"></i></header>
+                
                 <?php
                 //loop through box numbers to get box detail
                 foreach ($array_wcsboxnum as $keyboxnum => $value) {
@@ -47,7 +42,7 @@ $array_wcsinv = $sql_wcsinv->fetchAll(pdo::FETCH_ASSOC);
                     foreach ($array_wcsbox as $keybox => $value) {
                         ?>
 
-                        <div class="panel-body">
+                <div class="panel-body" style="display: none;">
                             <div class="well">
                                 <h3>Box#: <?php echo $array_wcsbox[$keybox]['PBBOX'] . ' (of ' . $boxcount . ')'; ?></h3>
                                 <div class="row">
@@ -115,6 +110,3 @@ $array_wcsinv = $sql_wcsinv->fetchAll(pdo::FETCH_ASSOC);
         <?php } #End of invoice loop      ?>  
 
 
-
-    </div>
-</section>
