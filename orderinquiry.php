@@ -101,8 +101,6 @@
                 }
             }
 
-
-
             function getorderdata(jdeinvoice) {
                 $('#maincontent').addClass('hidden');
                 data_pend(jdeinvoice);
