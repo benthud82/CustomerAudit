@@ -511,3 +511,10 @@ function getWorkingDays($startDate, $endDate, $holidays) {
 //// => will return 7
 //
 }
+
+function _datetoyyyymmdd($convertdate) {
+    $date = strtotime(date($convertdate));
+    $date2 = date("Ymd", $date);
+
+    return $date2;
+}
