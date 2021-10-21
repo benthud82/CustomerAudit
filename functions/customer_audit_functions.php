@@ -518,3 +518,12 @@ function _datetoyyyymmdd($convertdate) {
 
     return $date2;
 }
+
+function _YYYYMMDDtomysqldate($convertdate) {
+    $year = substr($convertdate, 0, 4);
+    $month = substr($convertdate, 4, 2);
+    $day = substr($convertdate, 6, 4);
+
+    $mysqldate = date('Y-m-d', strtotime("$year-$month-$day"));
+    return $mysqldate;
+}
