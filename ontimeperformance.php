@@ -353,6 +353,68 @@
                 <div id="resultsContainer" class="hidden">
                     <h3 class="results-header">On-Time Performance for Salesplan: <span id="salesplanDisplay"></span></h3>
                     
+                    <!-- Summary Card for Entire Salesplan -->
+                    <div id="salesplanSummary" class="card" style="margin-bottom: 20px; background: linear-gradient(to right, #f8f9fa, white); border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); padding: 0; border-left: 4px solid #007bff; overflow: hidden;">
+                        <div style="padding: 15px 20px; border-bottom: 1px solid #eaeaea;">
+                            <h4 style="margin: 0; color: #333; font-weight: 600;">
+                                <i class="fa fa-bar-chart" style="color: #007bff; margin-right: 8px;"></i> Salesplan Overall Performance
+                            </h4>
+                        </div>
+                        <div style="padding: 20px;" class="shipment-statistics-container">
+                            <!-- Loading spinner - shown by default, hidden when data loads -->
+                            <div id="summaryLoadingSpinner" class="text-center" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; background-color: rgba(255, 255, 255, 0.8); display: flex; justify-content: center; align-items: center; z-index: 10;">
+                                <div>
+                                    <i class="fa fa-spinner fa-spin" style="font-size: 3em; color: #3498db;"></i>
+                                    <p style="margin-top: 10px; color: #555;">Loading data...</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Content that will be hidden while loading -->
+                            <div id="summaryStatisticsContent" style="position: relative; opacity: 0; transition: opacity 0.3s;">
+                                <div class="row">
+                                    <div class="col-md-9">
+                                        <div class="row">
+                                            <div class="col-md-3 text-center" style="padding: 15px 10px; border-right: 1px dashed #e0e0e0;">
+                                                <div style="font-size: 0.9em; color: #777; margin-bottom: 5px;">Total Shipments</div>
+                                                <h2 id="totalShipCount" style="margin: 0; font-weight: bold; font-size: 2.5em; color: #333;">0</h2>
+                                            </div>
+                                            <div class="col-md-3 text-center" style="padding: 15px 10px; border-right: 1px dashed #e0e0e0;">
+                                                <div style="font-size: 0.9em; color: #777; margin-bottom: 5px;">On-Time Shipments</div>
+                                                <h2 id="totalOntimeCount" style="margin: 0; font-weight: bold; font-size: 2.5em; color: #2ecc71;">0</h2>
+                                            </div>
+                                            <div class="col-md-3 text-center" style="padding: 15px 10px; border-right: 1px dashed #e0e0e0;">
+                                                <div style="font-size: 0.9em; color: #777; margin-bottom: 5px;">Late Shipments</div>
+                                                <h2 id="totalLateCount" style="margin: 0; font-weight: bold; font-size: 2.5em; color: #e74c3c;">0</h2>
+                                            </div>
+                                            <div class="col-md-3 text-center" style="padding: 15px 10px;">
+                                                <div style="font-size: 0.9em; color: #777; margin-bottom: 5px;">Customer Experience</div>
+                                                <h2 id="overallExperience" style="margin: 0; font-weight: bold; font-size: 2.5em;">0%</h2>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3" style="border-left: 1px solid #eaeaea; padding-left: 25px;">
+                                        <div style="height: 80px; position: relative;">
+                                            <div style="position: absolute; width: 100%; bottom: 0;">
+                                                <div style="margin-bottom: 8px; display: flex; justify-content: space-between;">
+                                                    <span style="font-size: 0.95em; font-weight: 500; color: #555;">On-Time Performance</span>
+                                                    <span id="performancePercentageDisplay" style="font-weight: bold; font-size: 1.1em;">0%</span>
+                                                </div>
+                                                <div style="width: 100%; height: 12px; background: #eee; border-radius: 6px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);">
+                                                    <div id="performanceProgressBar" style="height: 100%; width: 0%; border-radius: 6px; transition: width 0.5s;"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="text-right" style="margin-top: 20px;">
+                                            <button type="button" class="btn btn-info btn-sm" onclick="viewDeliveryTimes()" style="border-radius: 4px; padding: 8px 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                                                <i class="fa fa-truck"></i> View All Delivery Times
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="dashboard-controls">
                         <h4 class="controls-title">Dashboard Controls</h4>
                         
@@ -383,6 +445,9 @@
                             <button type="button" class="btn btn-success btn-control" onclick="exportToExcel()">
                                 <i class="fa fa-file-excel-o"></i> Export to Excel
                             </button>
+                            <button type="button" class="btn btn-info btn-control" onclick="viewDeliveryTimes()">
+                                <i class="fa fa-truck"></i> View Delivery Times
+                            </button>
                         </div>
                     </div>
                     
@@ -400,6 +465,7 @@
                                     <th class="text-center">On-Time Count</th>
                                     <th class="text-center">Late Count</th>
                                     <th class="text-center">Customer Experience</th>
+                                    <th class="text-center">Actions</th>
                                 </tr>
                             </thead>
                             <tbody id="tableBody">
@@ -479,6 +545,11 @@
                     var currentBillTo = '';
                     var currentSalesPlan = '';
                     
+                    // Global number formatting function
+                    function formatNumber(num) {
+                        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    }
+                    
                     function loadOntimeData() {
                         var salesplan = document.getElementById('salesplan').value.trim();
                         
@@ -486,6 +557,20 @@
                             alert('Please enter a Sales Plan number.');
                             return;
                         }
+                        
+                        // Reset summary card values
+                        document.getElementById('totalShipCount').textContent = '0';
+                        document.getElementById('totalOntimeCount').textContent = '0';
+                        document.getElementById('totalLateCount').textContent = '0';
+                        document.getElementById('overallExperience').textContent = '0%';
+                        document.getElementById('overallExperience').style.color = '#333';
+                        document.getElementById('performancePercentageDisplay').textContent = '0%';
+                        document.getElementById('performancePercentageDisplay').style.color = '#333';
+                        document.getElementById('performanceProgressBar').style.width = '0%';
+                        document.getElementById('performanceProgressBar').style.backgroundColor = '#ccc';
+                        
+                        // Show the summary loading spinner
+                        showSummaryLoadingSpinner();
                         
                         // Show loading indicator and container
                         document.getElementById('dashboard-container').innerHTML = `
@@ -594,6 +679,9 @@
                                 }
                             });
                             
+                            // Calculate and update the overall summary
+                            updateSalesPlanSummary(dashboardData);
+                            
                             // Display the sorted data in the current view
                             if (currentView === 'card') {
                                 displayDashboard(dashboardData);
@@ -619,7 +707,7 @@
                         tableBody.innerHTML = '';
                         
                         if (data.length === 0) {
-                            tableBody.innerHTML = '<tr><td colspan="6" class="text-center">No data found for the specified Sales Plan.</td></tr>';
+                            tableBody.innerHTML = '<tr><td colspan="7" class="text-center">No data found for the specified Sales Plan.</td></tr>';
                             return;
                         }
                         
@@ -642,10 +730,15 @@
                             tr.innerHTML = `
                                 <td>${row.SALESPLAN}</td>
                                 <td>${row.BILLTO}</td>
-                                <td class="text-center">${row.shipCount}</td>
-                                <td class="text-center">${row.ontimeCount}</td>
-                                <td class="text-center">${row.lateCount}</td>
+                                <td class="text-center">${formatNumber(row.shipCount)}</td>
+                                <td class="text-center">${formatNumber(row.ontimeCount)}</td>
+                                <td class="text-center">${formatNumber(row.lateCount)}</td>
                                 <td class="text-center"><span class="${performanceClass}">${row.customerExperience}%</span></td>
+                                <td class="text-center">
+                                    <button class="btn btn-xs btn-info" onclick="viewDeliveryTimesForRow(event, '${row.SALESPLAN}')">
+                                        <i class="fa fa-truck"></i> Delivery Times
+                                    </button>
+                                </td>
                             `;
                             
                             // Add click event for drill-down
@@ -707,7 +800,7 @@
                                 
                                 <div class="metrics-grid">
                                     <div class="metric-item">
-                                        <div class="metric-value">${row.shipCount}</div>
+                                        <div class="metric-value">${formatNumber(row.shipCount)}</div>
                                         <div class="metric-label">Total Shipments</div>
                                     </div>
                                     <div class="metric-item">
@@ -715,11 +808,11 @@
                                         <div class="metric-label">Customer Experience</div>
                                     </div>
                                     <div class="metric-item">
-                                        <div class="metric-value">${row.ontimeCount}</div>
+                                        <div class="metric-value">${formatNumber(row.ontimeCount)}</div>
                                         <div class="metric-label">On-Time</div>
                                     </div>
                                     <div class="metric-item">
-                                        <div class="metric-value">${row.lateCount}</div>
+                                        <div class="metric-value">${formatNumber(row.lateCount)}</div>
                                         <div class="metric-label">Late</div>
                                     </div>
                                 </div>
@@ -732,6 +825,12 @@
                                     <div class="progress-bar-container">
                                         <div class="progress-bar ${performanceClass.split(' ')[1]}" style="width: ${customerExperience}%"></div>
                                     </div>
+                                </div>
+                                
+                                <div style="text-align: center; margin-top: 10px;">
+                                    <button class="btn btn-xs btn-info" onclick="viewDeliveryTimesForCard(event, '${row.SALESPLAN}')">
+                                        <i class="fa fa-truck"></i> View Delivery Times
+                                    </button>
                                 </div>
                             `;
                             
@@ -935,14 +1034,101 @@
                             
                             tr.innerHTML = `
                                 <td>${row.SHIPTO}</td>
-                                <td class="text-center">${row.shipCount}</td>
-                                <td class="text-center">${row.ontimeCount}</td>
-                                <td class="text-center">${row.lateCount}</td>
+                                <td class="text-center">${formatNumber(row.shipCount)}</td>
+                                <td class="text-center">${formatNumber(row.ontimeCount)}</td>
+                                <td class="text-center">${formatNumber(row.lateCount)}</td>
                                 <td class="text-center"><span class="${performanceClass}">${row.customerExperience}%</span></td>
                             `;
                             
                             tableBody.appendChild(tr);
                         });
+                    }
+                    
+                    // Function to update the salesplan summary card
+                    function updateSalesPlanSummary(data) {
+                        // Calculate totals
+                        var totalShipCount = 0;
+                        var totalOntimeCount = 0;
+                        var totalLateCount = 0;
+                        
+                        data.forEach(function(row) {
+                            totalShipCount += parseInt(row.shipCount);
+                            totalOntimeCount += parseInt(row.ontimeCount);
+                            totalLateCount += parseInt(row.lateCount);
+                        });
+                        
+                        // Calculate overall customer experience
+                        var overallExperience = 0;
+                        if (totalShipCount > 0) {
+                            overallExperience = (totalOntimeCount / totalShipCount) * 100;
+                            overallExperience = overallExperience.toFixed(2);
+                        }
+                        
+                        // Format numbers with commas but no decimals
+                        function formatNumber(num) {
+                            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        }
+                        
+                        // Update the display
+                        document.getElementById('totalShipCount').textContent = formatNumber(totalShipCount);
+                        document.getElementById('totalOntimeCount').textContent = formatNumber(totalOntimeCount);
+                        document.getElementById('totalLateCount').textContent = formatNumber(totalLateCount);
+                        document.getElementById('overallExperience').textContent = overallExperience + '%';
+                        document.getElementById('performancePercentageDisplay').textContent = overallExperience + '%';
+                        
+                        // Set color based on performance
+                        var performanceClass = '';
+                        var performanceColor = '';
+                        
+                        if (overallExperience >= 90) {
+                            performanceClass = 'good';
+                            performanceColor = '#2ecc71';
+                        } else if (overallExperience >= 75) {
+                            performanceClass = 'warning';
+                            performanceColor = '#f39c12';
+                        } else {
+                            performanceClass = 'danger';
+                            performanceColor = '#e74c3c';
+                        }
+                        
+                        // Only change the color of the overall experience display
+                        document.getElementById('overallExperience').style.color = performanceColor;
+                        document.getElementById('performancePercentageDisplay').style.color = performanceColor;
+                        document.getElementById('performanceProgressBar').style.width = overallExperience + '%';
+                        document.getElementById('performanceProgressBar').style.backgroundColor = performanceColor;
+                        
+                        // Hide the spinner and show the content
+                        hideSummaryLoadingSpinner();
+                    }
+                    
+                    // Function to show the summary loading spinner
+                    function showSummaryLoadingSpinner() {
+                        document.getElementById('summaryLoadingSpinner').style.display = 'flex';
+                        document.getElementById('summaryStatisticsContent').style.opacity = '0';
+                    }
+                    
+                    // Function to hide the summary loading spinner
+                    function hideSummaryLoadingSpinner() {
+                        document.getElementById('summaryLoadingSpinner').style.display = 'none';
+                        document.getElementById('summaryStatisticsContent').style.opacity = '1';
+                    }
+                    
+                    // Function to navigate to delivery times page
+                    function viewDeliveryTimes() {
+                        var salesplan = document.getElementById('salesplanDisplay').textContent;
+                        window.open('deliverytimes.php?salesplan=' + encodeURIComponent(salesplan), '_blank');
+                    }
+                    
+                    // Function for card view - stop event propagation to prevent modal from opening
+                    function viewDeliveryTimesForCard(event, salesplan) {
+                        event.stopPropagation();
+                        window.open('deliverytimes.php?salesplan=' + encodeURIComponent(salesplan), '_blank');
+                    }
+                    
+                    // Function for table view - stop event propagation to prevent modal from opening
+                    function viewDeliveryTimesForRow(event, salesplan) {
+                        event.stopPropagation();
+                        window.open('deliverytimes.php?salesplan=' + encodeURIComponent(salesplan), '_blank');
                     }
                 </script>
             </section>

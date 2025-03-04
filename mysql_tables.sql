@@ -1,5 +1,6 @@
 Table: delivery_dates
 Columns:
+SALESPLAN varchar(12) 
 WHSE int(11) PK 
 WCSNUM int(11) PK 
 WONUM int(11) PK 
