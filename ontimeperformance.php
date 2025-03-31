@@ -36,6 +36,36 @@
                 border-radius: 8px;
             }
             
+            /* Enhanced styling for the salesplan stats card */
+            #salesplanSummary {
+                margin-bottom: 30px !important;
+                background: white !important;
+                border-radius: 8px !important;
+                box-shadow: 0 8px 20px rgba(0,0,0,0.15) !important;
+                padding: 0 !important;
+                border-left: 4px solid #007bff !important;
+                overflow: hidden !important;
+                position: relative !important;
+            }
+            
+            #salesplanSummary::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 5px;
+                background: linear-gradient(to right, #007bff, #00c6ff);
+            }
+            
+            .date-range-info {
+                font-size: 0.85em;
+                color: #666;
+                margin-top: 10px;
+                text-align: right;
+                font-style: italic;
+            }
+            
             .dashboard-grid {
                 display: grid;
                 grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -325,6 +355,117 @@
                 background-color: #e2e6ea;
                 border-color: #c8c8c8;
             }
+
+            /* Toast Notification Styles */
+            .toast-container {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                z-index: 9999;
+                pointer-events: none;
+            }
+
+            .toast {
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+                padding: 20px 30px;
+                margin-bottom: 10px;
+                min-width: 350px;
+                max-width: 450px;
+                display: flex;
+                align-items: center;
+                opacity: 0;
+                transform: translateY(20px);
+                transition: all 0.3s ease-in-out;
+                pointer-events: auto;
+                border: none;
+            }
+
+            .toast.show {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            .toast.success {
+                border-left: 4px solid #28a745;
+            }
+
+            .toast.error {
+                border-left: 4px solid #dc3545;
+            }
+
+            .toast.warning {
+                border-left: 4px solid #ffc107;
+            }
+
+            .toast i {
+                margin-right: 15px;
+                font-size: 24px;
+            }
+
+            .toast.success i {
+                color: #28a745;
+            }
+
+            .toast.error i {
+                color: #dc3545;
+            }
+
+            .toast.warning i {
+                color: #ffc107;
+            }
+
+            .toast-content {
+                flex-grow: 1;
+            }
+
+            .toast-title {
+                font-weight: 600;
+                margin-bottom: 4px;
+                color: #212529;
+                font-size: 1.1em;
+            }
+
+            .toast-message {
+                color: #6c757d;
+                font-size: 0.95em;
+            }
+
+            .toast-close {
+                margin-left: 15px;
+                cursor: pointer;
+                color: #adb5bd;
+                transition: color 0.2s ease;
+                padding: 5px;
+                border-radius: 50%;
+                background: transparent;
+                border: none;
+            }
+
+            .toast-close:hover {
+                color: #343a40;
+                background: rgba(0,0,0,0.05);
+            }
+
+            .toast-backdrop {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0,0,0,0.5);
+                opacity: 0;
+                transition: opacity 0.3s ease-in-out;
+                z-index: 9998;
+                pointer-events: none;
+            }
+
+            .toast-backdrop.show {
+                opacity: 1;
+                pointer-events: auto;
+            }
         </style>
     </head>
 
@@ -334,18 +475,48 @@
         <!--include vert nav php file-->
         <?php include_once 'verticalnav.php'; ?>
 
+        <!-- Toast Notification Container -->
+        <div class="toast-container"></div>
+
         <section id="content"> 
-            <section class="main padder" style="padding-top: 100px"> 
+            <section class="main padder" style="padding-top: 100px; margin-left: 100px;"> 
 
                 <!--Options to select sales plan-->
                 <div class="search-container">
                     <div class="row"> 
-                        <div class="col-md-4 col-sm-4 col-xs-12 col-lg-2 col-xl-2 text-center">
+                        <div class="col-md-3 col-sm-3 col-xs-12 col-lg-2 col-xl-2 text-center">
                             <label>Enter Salesplan</label>
                             <input type="text" name="salesplan" id="salesplan" class="form-control" placeholder="" tabindex="0"/>
                         </div>
-                        <div class="col-md-4 col-sm-4 col-xs-12 col-lg-2 col-xl-2 text-center">
+                        <div class="col-md-3 col-sm-3 col-xs-12 col-lg-2 col-xl-2 text-center">
+                            <label>Quarter Selection</label>
+                            <select id="quarterSelector" class="form-control" tabindex="0">
+                                <option value="">Select Quarter</option>
+                                <!-- Quarters will be populated via JavaScript -->
+                            </select>
+                        </div>
+                        <div class="col-md-3 col-sm-3 col-xs-12 col-lg-2 col-xl-2 text-center">
+                            <label>Start Date</label>
+                            <input type="date" name="startDate" id="startDate" class="form-control" tabindex="0"/>
+                        </div>
+                        <div class="col-md-3 col-sm-3 col-xs-12 col-lg-2 col-xl-2 text-center">
+                            <label>End Date</label>
+                            <input type="date" name="endDate" id="endDate" class="form-control" tabindex="0"/>
+                        </div>
+                        <div class="col-md-3 col-sm-3 col-xs-12 col-lg-2 col-xl-2 text-center">
                             <button id="loaddata" type="button" class="btn btn-primary" onclick="loadOntimeData();" style="margin: 23px 0px 0px 0px;" tabindex="0">Load Data</button>
+                        </div>
+                        <div class="col-md-3 col-sm-3 col-xs-12 col-lg-2 col-xl-2 text-center">
+                            <button type="button" class="btn btn-info" onclick="openUPSHolidayModal();" style="margin: 23px 0px 0px 0px;" tabindex="0">
+                                <i class="fa fa-calendar"></i> UPS Holidays
+                            </button>
+                        </div>
+                    </div>
+                    <div id="dateError" class="row hidden" style="padding-bottom: 10px;">
+                        <div class="col-md-12 col-sm-12 col-xs-12 text-center">
+                            <div class="alert alert-danger">
+                                <strong>Error:</strong> Custom date ranges must be 90 days or less and within the last 2 years. Quarter selections are allowed if available in the dropdown.
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -359,6 +530,7 @@
                             <h4 style="margin: 0; color: #333; font-weight: 600;">
                                 <i class="fa fa-bar-chart" style="color: #007bff; margin-right: 8px;"></i> Salesplan Overall Performance
                             </h4>
+                            <div class="date-range-info">Data for period: <span id="displayStartDate"></span> to <span id="displayEndDate"></span></div>
                         </div>
                         <div style="padding: 20px;" class="shipment-statistics-container">
                             <!-- Loading spinner - shown by default, hidden when data loads -->
@@ -534,6 +706,77 @@
                     </div>
                 </div>
 
+                <!-- Modal for UPS Holiday Management -->
+                <div id="upsHolidayModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header" style="background-color: #17a2b8; color: white;">
+                                <button type="button" class="close" data-dismiss="modal" style="color: white;">&times;</button>
+                                <h4 class="modal-title">UPS Holiday Management</h4>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Add Holiday Form -->
+                                <div class="add-holiday-section" style="margin-bottom: 20px; padding: 15px; background-color: #f8f9fa; border-radius: 5px;">
+                                    <form id="holidayForm" class="form-inline">
+                                        <div class="form-group">
+                                            <label for="holidayDate" class="sr-only">Holiday Date</label>
+                                            <input type="date" class="form-control" id="holidayDate" required>
+                                        </div>
+                                        <div class="form-group" style="margin-left: 10px;">
+                                            <label for="holidayDesc" class="sr-only">Holiday Description</label>
+                                            <input type="text" class="form-control" id="holidayDesc" placeholder="Holiday Description" maxlength="45" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary" style="margin-left: 10px;">
+                                            <i class="fa fa-plus"></i> Add Holiday
+                                        </button>
+                                    </form>
+                                </div>
+
+                                <!-- Holiday Table -->
+                                <div class="table-responsive">
+                                    <table class="table table-hover" id="holidayTable">
+                                        <thead style="background-color: #f8f9fa;">
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Description</th>
+                                                <th style="width: 100px;">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="holidayTableBody">
+                                            <!-- Holiday data will be loaded here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- Status Messages -->
+                                <div id="holidayStatus" class="alert" style="display: none; margin-top: 15px;"></div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Delete Confirmation Modal -->
+                <div id="deleteConfirmModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog modal-sm">
+                        <div class="modal-content">
+                            <div class="modal-header" style="background-color: #dc3545; color: white;">
+                                <button type="button" class="close" data-dismiss="modal" style="color: white;">&times;</button>
+                                <h4 class="modal-title">Confirm Delete</h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>Are you sure you want to delete this holiday?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- JavaScript for data loading and display -->
                 <script>
                     // Store the data globally so we can re-sort without fetching again
@@ -544,6 +787,242 @@
                     var shipToData = []; // Store ship-to data for export
                     var currentBillTo = '';
                     var currentSalesPlan = '';
+                    
+                    // Initialize page when document is ready
+                    $(document).ready(function() {
+                        // Populate the quarter dropdown
+                        populateQuarterDropdown();
+                        
+                        // Set end date to today
+                        var today = new Date();
+                        var endDateStr = today.toISOString().split('T')[0];
+                        $('#endDate').val(endDateStr);
+                        
+                        // Set start date to 90 days ago
+                        var startDate = new Date();
+                        startDate.setDate(today.getDate() - 90);
+                        var startDateStr = startDate.toISOString().split('T')[0];
+                        $('#startDate').val(startDateStr);
+                        
+                        // Add event listeners for date inputs
+                        $('#startDate, #endDate').on('change', function() {
+                            validateDateRange();
+                            // Clear quarter selection when dates are manually changed
+                            $('#quarterSelector').val('');
+                        });
+                        
+                        // Add event listener for quarter selection
+                        $('#quarterSelector').on('change', function() {
+                            setDatesByQuarter($(this).val());
+                        });
+
+                        // Add holiday form submission handler
+                        $('#holidayForm').on('submit', function(e) {
+                            e.preventDefault();
+                            
+                            var formData = {
+                                holiday_date: $('#holidayDate').val(),
+                                holiday_desc: $('#holidayDesc').val()
+                            };
+                            
+                            $.ajax({
+                                url: 'globaldata/add_ups_holiday.php',
+                                type: 'POST',
+                                data: formData,
+                                dataType: 'json',
+                                success: function(response) {
+                                    if (response.success) {
+                                        // Reset form
+                                        $('#holidayForm')[0].reset();
+                                        // Reload holidays
+                                        loadHolidays();
+                                        // Show success message
+                                        showStatusMessage('success', 'Holiday added successfully');
+                                    } else {
+                                        showStatusMessage('danger', response.message);
+                                    }
+                                },
+                                error: function(xhr, status, error) {
+                                    showStatusMessage('danger', 'Failed to add holiday: ' + error);
+                                }
+                            });
+                        });
+
+                        // Delete confirmation handling
+                        $('#confirmDeleteBtn').click(function() {
+                            if (holidayToDelete) {
+                                $.ajax({
+                                    url: 'globaldata/delete_ups_holiday.php',
+                                    type: 'POST',
+                                    data: { holiday_date: holidayToDelete },
+                                    dataType: 'json',
+                                    success: function(response) {
+                                        if (response.success) {
+                                            loadHolidays();
+                                            showStatusMessage('success', 'Holiday deleted successfully');
+                                        } else {
+                                            showStatusMessage('danger', response.message);
+                                        }
+                                    },
+                                    error: function(xhr, status, error) {
+                                        showStatusMessage('danger', 'Failed to delete holiday: ' + error);
+                                    }
+                                });
+                                $('#deleteConfirmModal').modal('hide');
+                                holidayToDelete = null;
+                            }
+                        });
+                    });
+                    
+                    // Function to populate the quarter dropdown
+                    function populateQuarterDropdown() {
+                        var today = new Date();
+                        var currentYear = today.getFullYear();
+                        var currentMonth = today.getMonth() + 1; // JavaScript months are 0-based
+                        
+                        var dropdown = $('#quarterSelector');
+                        dropdown.empty();
+                        dropdown.append('<option value="">Select Quarter</option>');
+                        
+                        // Determine which quarters are complete based on current date
+                        var completedQuarters = [];
+                        
+                        // Check the previous 2 years plus current year
+                        for (var year = currentYear; year >= currentYear - 2; year--) {
+                            // For the current year, only include completed quarters
+                            if (year === currentYear) {
+                                if (currentMonth >= 4) completedQuarters.push({ year: year, quarter: 1 }); // Q1 (Jan-Mar)
+                                if (currentMonth >= 7) completedQuarters.push({ year: year, quarter: 2 }); // Q2 (Apr-Jun)
+                                if (currentMonth >= 10) completedQuarters.push({ year: year, quarter: 3 }); // Q3 (Jul-Sep)
+                                // Q4 is only complete if we're in the next year
+                            } 
+                            // For previous years, include all quarters
+                            else {
+                                completedQuarters.push({ year: year, quarter: 1 });
+                                completedQuarters.push({ year: year, quarter: 2 });
+                                completedQuarters.push({ year: year, quarter: 3 });
+                                completedQuarters.push({ year: year, quarter: 4 });
+                            }
+                        }
+                        
+                        // Sort quarters in descending order (most recent first)
+                        completedQuarters.sort(function(a, b) {
+                            if (a.year !== b.year) return b.year - a.year;
+                            return b.quarter - a.quarter;
+                        });
+                        
+                        // Add options to dropdown
+                        completedQuarters.forEach(function(q) {
+                            var label = 'Q' + q.quarter + ' ' + q.year;
+                            var value = q.year + '-' + q.quarter;
+                            dropdown.append('<option value="' + value + '">' + label + '</option>');
+                        });
+                    }
+                    
+                    // Function to set start and end dates based on quarter selection
+                    function setDatesByQuarter(quarterValue) {
+                        if (!quarterValue) return;
+                        
+                        var parts = quarterValue.split('-');
+                        var year = parseInt(parts[0]);
+                        var quarter = parseInt(parts[1]);
+                        
+                        var startDate, endDate;
+                        
+                        switch (quarter) {
+                            case 1: // Q1: Jan-Mar
+                                startDate = year + '-01-01';
+                                endDate = year + '-03-31';
+                                break;
+                            case 2: // Q2: Apr-Jun
+                                startDate = year + '-04-01';
+                                endDate = year + '-06-30';
+                                break;
+                            case 3: // Q3: Jul-Sep
+                                startDate = year + '-07-01';
+                                endDate = year + '-09-30';
+                                break;
+                            case 4: // Q4: Oct-Dec
+                                startDate = year + '-10-01';
+                                endDate = year + '-12-31';
+                                break;
+                        }
+                        
+                        $('#startDate').val(startDate);
+                        $('#endDate').val(endDate);
+                        
+                        // Validate the date range
+                        validateDateRange();
+                    }
+                    
+                    // Function to validate date range
+                    function validateDateRange() {
+                        var startDate = new Date($('#startDate').val());
+                        var endDate = new Date($('#endDate').val());
+                        
+                        // Calculate date difference in days
+                        var timeDiff = endDate - startDate;
+                        var daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+                        
+                        // Check if start date is more than 2 years ago
+                        var twoYearsAgo = new Date();
+                        twoYearsAgo.setFullYear(twoYearsAgo.getFullYear() - 2);
+                        
+                        // Check if the current selection is a valid quarter
+                        var isQuarterSelection = false;
+                        var quarterValue = $('#quarterSelector').val();
+                        
+                        if (quarterValue) {
+                            // This is a quarter selection, check if it's a valid quarter
+                            var parts = quarterValue.split('-');
+                            var year = parseInt(parts[0]);
+                            var quarter = parseInt(parts[1]);
+                            
+                            var quarterStartDate, quarterEndDate;
+                            switch (quarter) {
+                                case 1: // Q1: Jan-Mar
+                                    quarterStartDate = new Date(year, 0, 1); // Jan 1
+                                    quarterEndDate = new Date(year, 2, 31); // Mar 31
+                                    break;
+                                case 2: // Q2: Apr-Jun
+                                    quarterStartDate = new Date(year, 3, 1); // Apr 1
+                                    quarterEndDate = new Date(year, 5, 30); // Jun 30
+                                    break;
+                                case 3: // Q3: Jul-Sep
+                                    quarterStartDate = new Date(year, 6, 1); // Jul 1
+                                    quarterEndDate = new Date(year, 8, 30); // Sep 30
+                                    break;
+                                case 4: // Q4: Oct-Dec
+                                    quarterStartDate = new Date(year, 9, 1); // Oct 1
+                                    quarterEndDate = new Date(year, 11, 31); // Dec 31
+                                    break;
+                            }
+                            
+                            // Check if the dates match the quarter dates (allow 1 day difference for timezone issues)
+                            var startDiff = Math.abs(startDate.getTime() - quarterStartDate.getTime());
+                            var endDiff = Math.abs(endDate.getTime() - quarterEndDate.getTime());
+                            
+                            if (startDiff <= 86400000 && endDiff <= 86400000) { // 86400000 ms = 1 day
+                                isQuarterSelection = true;
+                            }
+                        }
+                        
+                        // If it's a quarter selection, only validate the 2-year limit
+                        // Otherwise, validate both the 90-day limit and 2-year limit
+                        var isValid = isQuarterSelection ? 
+                            (startDate >= twoYearsAgo) : 
+                            (daysDiff <= 90 && daysDiff >= 0 && startDate >= twoYearsAgo);
+                        
+                        if (!isValid) {
+                            $('#dateError').removeClass('hidden');
+                            $('#loaddata').prop('disabled', true);
+                        } else {
+                            $('#dateError').addClass('hidden');
+                            $('#loaddata').prop('disabled', false);
+                        }
+                        
+                        return isValid;
+                    }
                     
                     // Global number formatting function
                     function formatNumber(num) {
@@ -557,6 +1036,17 @@
                             alert('Please enter a Sales Plan number.');
                             return;
                         }
+                        
+                        if (!validateDateRange()) {
+                            return;
+                        }
+                        
+                        var startDate = document.getElementById('startDate').value;
+                        var endDate = document.getElementById('endDate').value;
+                        
+                        // Update date range display
+                        document.getElementById('displayStartDate').textContent = formatDisplayDate(startDate);
+                        document.getElementById('displayEndDate').textContent = formatDisplayDate(endDate);
                         
                         // Reset summary card values
                         document.getElementById('totalShipCount').textContent = '0';
@@ -596,7 +1086,11 @@
                         // AJAX call to get data
                         $.ajax({
                             url: 'globaldata/data_ontimeperformance.php',
-                            data: { salesplan: salesplan },
+                            data: { 
+                                salesplan: salesplan,
+                                start_date: startDate,
+                                end_date: endDate
+                            },
                             type: 'GET',
                             dataType: 'json',
                             success: function(data) {
@@ -743,7 +1237,7 @@
                             
                             // Add click event for drill-down
                             tr.addEventListener('click', function() {
-                                showDetailsModal(row.BILLTO, row.SALESPLAN, row.customerExperience);
+                                showDetails(row.BILLTO, row.SALESPLAN);
                             });
                             
                             tableBody.appendChild(tr);
@@ -836,7 +1330,7 @@
                             
                             // Add click event for drill-down functionality
                             card.addEventListener('click', function() {
-                                showDetailsModal(row.BILLTO, row.SALESPLAN, row.customerExperience);
+                                showDetails(row.BILLTO, row.SALESPLAN);
                             });
                             
                             dashboardGrid.appendChild(card);
@@ -942,29 +1436,19 @@
                         return year + month + day;
                     }
                     
-                    function showDetailsModal(billto, salesplan, overallExperience) {
-                        // Store current values for export
+                    // Format date for display (YYYY-MM-DD to MMM DD, YYYY)
+                    function formatDisplayDate(dateStr) {
+                        var date = new Date(dateStr);
+                        var options = { year: 'numeric', month: 'short', day: 'numeric' };
+                        return date.toLocaleDateString('en-US', options);
+                    }
+                    
+                    function showDetails(billto, salesplan) {
                         currentBillTo = billto;
                         currentSalesPlan = salesplan;
                         
-                        // Set modal title and information
-                        document.getElementById('modalBillTo').textContent = billto;
-                        document.getElementById('modalSalesPlan').textContent = salesplan;
-                        
-                        // Set overall experience with color coding
-                        var experienceSpan = document.getElementById('modalOverallExperience');
-                        var experienceClass = '';
-                        
-                        if (overallExperience >= 90) {
-                            experienceClass = 'metric-good';
-                        } else if (overallExperience >= 75) {
-                            experienceClass = 'metric-warning';
-                        } else {
-                            experienceClass = 'metric-danger';
-                        }
-                        
-                        experienceSpan.className = experienceClass;
-                        experienceSpan.textContent = overallExperience + '%';
+                        // Update modal title with billto
+                        document.getElementById('modalTitle').textContent = 'Ship-To Details for Bill-To: ' + billto;
                         
                         // Show loading state
                         document.getElementById('modalLoading').classList.remove('hidden');
@@ -974,10 +1458,19 @@
                         // Show the modal
                         $('#detailsModal').modal('show');
                         
+                        // Get date range values
+                        var startDate = document.getElementById('startDate').value;
+                        var endDate = document.getElementById('endDate').value;
+                        
                         // Fetch ship-to level data
                         $.ajax({
                             url: 'globaldata/data_shiptodetails.php',
-                            data: { billto: billto, salesplan: salesplan },
+                            data: { 
+                                billto: billto, 
+                                salesplan: salesplan,
+                                start_date: startDate,
+                                end_date: endDate
+                            },
                             type: 'GET',
                             dataType: 'json',
                             success: function(data) {
@@ -1116,19 +1609,134 @@
                     // Function to navigate to delivery times page
                     function viewDeliveryTimes() {
                         var salesplan = document.getElementById('salesplanDisplay').textContent;
-                        window.open('deliverytimes.php?salesplan=' + encodeURIComponent(salesplan), '_blank');
+                        var startDate = document.getElementById('startDate').value;
+                        var endDate = document.getElementById('endDate').value;
+                        
+                        // Get quarter value
+                        var quarterValue = $('#quarterSelector').val();
+                        console.log("Quarter value being passed:", quarterValue);
+                        
+                        // Build URL with all parameters
+                        var url = 'deliverytimes.php?salesplan=' + encodeURIComponent(salesplan) + 
+                            '&start_date=' + encodeURIComponent(startDate) + 
+                            '&end_date=' + encodeURIComponent(endDate);
+                        
+                        // Only add quarter parameter if a quarter is selected
+                        if (quarterValue && quarterValue !== '') {
+                            url += '&quarter=' + encodeURIComponent(quarterValue);
+                        }
+                        
+                        console.log("Opening URL:", url);
+                        window.open(url, '_blank');
                     }
                     
                     // Function for card view - stop event propagation to prevent modal from opening
                     function viewDeliveryTimesForCard(event, salesplan) {
                         event.stopPropagation();
-                        window.open('deliverytimes.php?salesplan=' + encodeURIComponent(salesplan), '_blank');
+                        var startDate = document.getElementById('startDate').value;
+                        var endDate = document.getElementById('endDate').value;
+                        
+                        // Get quarter value
+                        var quarterValue = $('#quarterSelector').val();
+                        console.log("Quarter value being passed:", quarterValue);
+                        
+                        // Build URL with all parameters
+                        var url = 'deliverytimes.php?salesplan=' + encodeURIComponent(salesplan) + 
+                            '&start_date=' + encodeURIComponent(startDate) + 
+                            '&end_date=' + encodeURIComponent(endDate);
+                        
+                        // Only add quarter parameter if a quarter is selected
+                        if (quarterValue && quarterValue !== '') {
+                            url += '&quarter=' + encodeURIComponent(quarterValue);
+                        }
+                        
+                        console.log("Opening URL:", url);
+                        window.open(url, '_blank');
                     }
                     
                     // Function for table view - stop event propagation to prevent modal from opening
                     function viewDeliveryTimesForRow(event, salesplan) {
                         event.stopPropagation();
-                        window.open('deliverytimes.php?salesplan=' + encodeURIComponent(salesplan), '_blank');
+                        var startDate = document.getElementById('startDate').value;
+                        var endDate = document.getElementById('endDate').value;
+                        
+                        // Use jQuery to get the quarter selector value
+                        var quarterValue = $('#quarterSelector').val();
+                        console.log("Quarter value being passed:", quarterValue);
+                        
+                        // Build URL with all parameters
+                        var url = 'deliverytimes.php?salesplan=' + encodeURIComponent(salesplan) + 
+                            '&start_date=' + encodeURIComponent(startDate) + 
+                            '&end_date=' + encodeURIComponent(endDate);
+                        
+                        // Only add quarter parameter if a quarter is selected
+                        if (quarterValue && quarterValue !== '') {
+                            url += '&quarter=' + encodeURIComponent(quarterValue);
+                        }
+                        
+                        console.log("Opening URL:", url);
+                        window.open(url, '_blank');
+                    }
+
+                    // UPS Holiday Management Functions
+                    function openUPSHolidayModal() {
+                        $('#upsHolidayModal').modal('show');
+                        loadHolidays();
+                        // Reset form and status message
+                        $('#holidayForm')[0].reset();
+                        $('#holidayStatus').hide();
+                    }
+
+                    function loadHolidays() {
+                        $.ajax({
+                            url: 'globaldata/get_ups_holidays.php',
+                            type: 'GET',
+                            dataType: 'json',
+                            success: function(data) {
+                                var tbody = $('#holidayTableBody');
+                                tbody.empty();
+                                
+                                data.forEach(function(holiday) {
+                                    var row = `
+                                        <tr>
+                                            <td>${formatDisplayDate(holiday.upsholiday_date)}</td>
+                                            <td>${holiday.ups_holiday_desc}</td>
+                                            <td>
+                                                <button class="btn btn-xs btn-danger" onclick="deleteHoliday('${holiday.upsholiday_date}')">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    `;
+                                    tbody.append(row);
+                                });
+                            },
+                            error: function(xhr, status, error) {
+                                showStatusMessage('error', 'Failed to load holidays: ' + error);
+                            }
+                        });
+                    }
+
+                    // Delete holiday handling
+                    var holidayToDelete = null;
+
+                    function deleteHoliday(date) {
+                        holidayToDelete = date;
+                        $('#deleteConfirmModal').modal('show');
+                    }
+
+                    // Status message handling
+                    function showStatusMessage(type, message) {
+                        var statusDiv = $('#holidayStatus');
+                        statusDiv.removeClass('alert-success alert-danger alert-warning')
+                            .addClass('alert-' + type)
+                            .html(message)
+                            .show();
+                        
+                        // Auto-hide after 3 seconds
+                        setTimeout(function() {
+                            statusDiv.fadeOut();
+                        }, 3000);
                     }
                 </script>
             </section>

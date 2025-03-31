@@ -6,7 +6,33 @@ include_once '../../globalfunctions/custdbfunctions.php';
 // Get billto and salesplan from GET request
 $billto = $_GET['billto'];
 $salesplan = $_GET['salesplan'];
-$mindate = date('Y-m-d', strtotime(' -90 days'));
+
+// Handle date parameters
+if (isset($_GET['start_date']) && isset($_GET['end_date'])) {
+    $startDate = $_GET['start_date'];
+    $endDate = $_GET['end_date'];
+    
+    // Validate date range (max 90 days, not more than 2 years old)
+    $today = new DateTime();
+    $startDateObj = new DateTime($startDate);
+    $endDateObj = new DateTime($endDate);
+    $twoYearsAgo = new DateTime();
+    $twoYearsAgo->modify('-2 years');
+    
+    // Calculate date difference
+    $dateDiff = $endDateObj->diff($startDateObj)->days;
+    
+    // Validate and adjust if needed
+    if ($dateDiff > 96 || $startDateObj < $twoYearsAgo) {
+        // If invalid, default to last 90 days
+        $endDate = date('Y-m-d');
+        $startDate = date('Y-m-d', strtotime('-90 days'));
+    }
+} else {
+    // Default to last 90 days if not specified
+    $endDate = date('Y-m-d');
+    $startDate = date('Y-m-d', strtotime('-90 days'));
+}
 
 // Prepare the SQL query to get the ship-to level data
 $sql = $conn1->prepare("SELECT 
@@ -20,7 +46,7 @@ $sql = $conn1->prepare("SELECT
                         WHERE
                             D.BILLTO = :billto
                             AND D.SALESPLAN = :salesplan
-                            AND D.DELIVERDATE >= :mindate
+                            AND D.DELIVERDATE BETWEEN :startDate AND :endDate
                         GROUP BY
                             D.SHIPTO
                         ORDER BY
@@ -28,7 +54,8 @@ $sql = $conn1->prepare("SELECT
 
 $sql->bindParam(':billto', $billto, PDO::PARAM_STR);
 $sql->bindParam(':salesplan', $salesplan, PDO::PARAM_STR);
-$sql->bindParam(':mindate', $mindate, PDO::PARAM_STR);
+$sql->bindParam(':startDate', $startDate, PDO::PARAM_STR);
+$sql->bindParam(':endDate', $endDate, PDO::PARAM_STR);
 $sql->execute();
 
 $result = $sql->fetchAll(PDO::FETCH_ASSOC);

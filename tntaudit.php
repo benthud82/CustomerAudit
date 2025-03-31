@@ -200,10 +200,19 @@
             //external link clicked for tnt audit report
             $(document).on("click", ".extlink_deliveryreport", function (e) {
                 var salesplan = $('#salesplan').val();
-                var url = "deliverytimes.php?salesplan=" + salesplan;
-                window.open(url, '_blank');
+                getsalesplan(salesplan);
             });
 
+            function getsalesplan(salesplan) {
+                var url = "deliverytimes.php?salesplan=" + salesplan;
+                
+                // Get the date range from the current page if available
+                if (typeof $('#startdate').val() !== 'undefined' && typeof $('#enddate').val() !== 'undefined') {
+                    url += "&start_date=" + $('#startdate').val() + "&end_date=" + $('#enddate').val();
+                }
+                
+                window.open(url, '_blank');
+            }
 
         </script>
     </body>
