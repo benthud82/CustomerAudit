@@ -568,7 +568,7 @@
                                         <div style="height: 80px; position: relative;">
                                             <div style="position: absolute; width: 100%; bottom: 0;">
                                                 <div style="margin-bottom: 8px; display: flex; justify-content: space-between;">
-                                                    <span style="font-size: 0.95em; font-weight: 500; color: #555;">On-Time Performance</span>
+                                                    <span style="font-size: 0.95em; font-weight: 500; color: #555;">Customer Experience</span>
                                                     <span id="performancePercentageDisplay" style="font-weight: bold; font-size: 1.1em;">0%</span>
                                                 </div>
                                                 <div style="width: 100%; height: 12px; background: #eee; border-radius: 6px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);">
@@ -1044,9 +1044,9 @@
                         var startDate = document.getElementById('startDate').value;
                         var endDate = document.getElementById('endDate').value;
                         
-                        // Update date range display
-                        document.getElementById('displayStartDate').textContent = formatDisplayDate(startDate);
-                        document.getElementById('displayEndDate').textContent = formatDisplayDate(endDate);
+                        // Update date range display (show as selected, no formatting)
+                        document.getElementById('displayStartDate').textContent = startDate;
+                        document.getElementById('displayEndDate').textContent = endDate;
                         
                         // Reset summary card values
                         document.getElementById('totalShipCount').textContent = '0';
@@ -1699,7 +1699,7 @@
                                 data.forEach(function(holiday) {
                                     var row = `
                                         <tr>
-                                            <td>${formatDisplayDate(holiday.upsholiday_date)}</td>
+                                            <td>${holiday.upsholiday_date}</td>
                                             <td>${holiday.ups_holiday_desc}</td>
                                             <td>
                                                 <button class="btn btn-xs btn-danger" onclick="deleteHoliday('${holiday.upsholiday_date}')">
